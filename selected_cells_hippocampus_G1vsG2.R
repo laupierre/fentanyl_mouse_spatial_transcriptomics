@@ -57,17 +57,11 @@ brain4 <- preprocess (data.dir, meta)
 
 brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A", "1C", "1A"))
 brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+saveRDS (brain, "brain_G2G1_groups.rds")
 
 
-
-#
 #counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
 #dim (counts)
-
-
-
-# saveRDS (brain, "brain.G2G4.for.clustering.rds")
-
 
 
 
