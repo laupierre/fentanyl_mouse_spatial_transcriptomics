@@ -60,8 +60,27 @@ brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 saveRDS (brain, "brain_G2G1_groups.rds")
 
 
-#counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
-#dim (counts)
+
+################
+## Wilcoxon test
+brain <- readRDS ("brain_G2G1_groups.rds")
+counts <- as.matrix (brain@assays$SCT@data [ ,WhichCells(brain, expression = location == "Hippocampus")])
+dim (counts)
+
+
+# str (brain.merge@assays)
+# raw counts
+# counts <- brain.merge@assays$Spatial@counts 
+# max (as.data.frame (counts [ ,1]))
+
+# normalized counts
+# counts <- as.matrix (brain.merge@assays$SCT@data) 
+# max (as.data.frame (counts [ ,1]))
+
+# scaled data
+# counts <- as.matrix (brain.merge@assays$SCT@scale.data) 
+# max (as.data.frame (counts [ ,1]))
+
 
 
 
