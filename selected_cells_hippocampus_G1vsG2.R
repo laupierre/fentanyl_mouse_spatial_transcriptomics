@@ -140,12 +140,32 @@ res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$p_val_adj), ]
 res <- res[ ,-which (colnames (res) == "de_family")]
 
-
-
 write.xlsx (res, "hippocampus_selected_cells_wilcoxon_analysis.xlsx", rowNames=F)
 
 boxplot (res$avg_logFC)
 abline (h=0)
+
+
+## Sanity check (with bulk RNA-Seq)
+
+rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
+rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean")]
+
+res2 <- merge (res, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
+head (res2)
+
+write.xlsx (res2, "hippocampus_selected_cells_comparison_rnaseq_vs_wilcoxon_analysis.xlsx", rowNames=F)
+
+plot (res2$avg_logFC, res2$Log2.Fold.Change, xlab="Wilcoxon", ylab="Chicago RNA-Seq", col=ifelse (res2$p_val_adj < 0.05, "blue", "black"))
+abline (h=0)
+abline (v=0)
+
+
+
+
+
+
+
 
 
 
