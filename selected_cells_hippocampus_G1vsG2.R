@@ -2,7 +2,7 @@
 
 library (Seurat)
 
-
+# generic function
 preprocess <- function (data.dir, meta) {
 sample.name <- gsub (".*/", "", data.dir)
 brain <- Load10X_Spatial (data.dir, filename= "filtered_feature_bc_matrix.h5")
@@ -38,6 +38,7 @@ brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 return (brain)
 }
 
+
 data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2C"
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
 brain1 <- preprocess (data.dir, meta)
@@ -54,22 +55,17 @@ data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq C
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G1_1A_shmv01.csv", sep=",")
 brain4 <- preprocess (data.dir, meta)
 
+brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A", "1C", "1A"))
+brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+
 
 
 #
 #counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
 #dim (counts)
 
-brain1@meta.data[WhichCells(brain1, expression = location == "Hippocampus"), ]
 
 
-
-
-
-#
-brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A", "2B", "2D"))
-
-brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 # saveRDS (brain, "brain.G2G4.for.clustering.rds")
 
 
