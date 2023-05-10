@@ -2,6 +2,8 @@
 
 library (Seurat)
 
+options(Seurat.object.assay.version = "v5")
+
 # generic function
 preprocess <- function (data.dir, meta) {
 sample.name <- gsub (".*/", "", data.dir)
@@ -35,6 +37,7 @@ brain@meta.data$location [idx] <- "Hippocampus"
 brain@meta.data$group <- sample.name
 brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 
+brain <- UpdateSeuratObject(brain)
 return (brain)
 }
 
@@ -54,6 +57,7 @@ brain3 <- preprocess (data.dir, meta)
 data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G1-1A"
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G1_1A_shmv01.csv", sep=",")
 brain4 <- preprocess (data.dir, meta)
+
 
 # By default, merge() will combine the Seurat objects based on the raw count matrices, erasing any previously normalized and scaled data matrices. 
 # If you want to merge the normalized data matrices as well as the raw count matrices, simply pass merge.data = TRUE. 
