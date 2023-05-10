@@ -6,7 +6,7 @@ library (Seurat)
 data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2C"
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
 
-
+preprocess <- function (data.dir, meta) {
 sample.name <- gsub (".*/", "", data.dir)
 brain <- Load10X_Spatial (data.dir, filename= "filtered_feature_bc_matrix.h5")
 brain[["Spatial"]] <- as(brain[["Spatial"]], Class = "Assay5")
@@ -23,9 +23,18 @@ brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 
 # normalization
 brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+# SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
-SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
+return (brain)
+}
 
+brain1 <- preprocess (data.dir, meta)
+
+
+
+
+
+## FIXME
 
 ## keep cells in the right hemisphere and selected in the hippocampus
 meta <- meta[meta$TOTAL == "rHEMI", ]
@@ -35,12 +44,9 @@ print (dim (meta1))
 cells.use <- meta1$Barcode
 cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
 
-idx <- match (cells.use, row.names (brain@meta.data))
 
-
-brain@meta.data$location <- "unknown"
-brain@meta.data$location [idx] <- "Hippocampus"
-
+counts <- as.matrix (brain@assays$SCT@data [ ,WhichCells(brain, cells = cells.use)])
+dim (counts)
 
 
 
