@@ -33,6 +33,7 @@ idx <- match (cells.use, row.names (brain@meta.data))
 brain@meta.data$location <- "unknown"
 brain@meta.data$location [idx] <- "Hippocampus"
 brain@meta.data$group <- sample.name
+brain1@meta.data$cell <- paste (row.names(brain1@meta.data), sample.name, sep="-")
 
 return (brain)
 }
@@ -40,13 +41,16 @@ return (brain)
 data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2C"
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
 brain1 <- preprocess (data.dir, meta)
-brain1@meta.data$cell <- paste (row.names(brain1@meta.data), "s1", sep="-")
+
+data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2A"
+meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2A_sniv01.csv", sep=",")
+brain2 <- preprocess (data.dir, meta)
 
 
 
 #
-counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
-dim (counts)
+#counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
+#dim (counts)
 
 brain1@meta.data[WhichCells(brain1, expression = location == "Hippocampus"), ]
 
