@@ -125,7 +125,6 @@ res <- merge (res, mymean, by="row.names")
 res <- res[order (res$p_val_adj), ]
 row.names (res) <- res$gene
 colnames (res)[1] <- "gene_name"
-head (res)
 
 
 ## Annotation
