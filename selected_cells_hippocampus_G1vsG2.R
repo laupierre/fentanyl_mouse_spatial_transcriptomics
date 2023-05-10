@@ -93,6 +93,8 @@ brain <- readRDS ("brain_G2G1_groups.rds")
 # raw counts
 counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
+# 32264   229
+
 
 
 
