@@ -70,7 +70,7 @@ dim (counts)
 
 # str (brain@assays)
 # raw counts
-# counts <- brain@assays$Spatial@counts 
+# counts <- data.matrix (brain[["Spatial"]]$counts)
 # max (as.data.frame (counts [ ,1]))
 
 # normalized counts
