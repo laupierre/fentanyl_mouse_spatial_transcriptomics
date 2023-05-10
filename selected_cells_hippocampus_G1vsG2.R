@@ -33,7 +33,7 @@ idx <- match (cells.use, row.names (brain@meta.data))
 brain@meta.data$location <- "unknown"
 brain@meta.data$location [idx] <- "Hippocampus"
 brain@meta.data$group <- sample.name
-brain1@meta.data$cell <- paste (row.names(brain1@meta.data), sample.name, sep="-")
+brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 
 return (brain)
 }
