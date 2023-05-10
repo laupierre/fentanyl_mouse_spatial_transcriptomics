@@ -3,9 +3,6 @@
 library (Seurat)
 
 
-data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2C"
-meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
-
 preprocess <- function (data.dir, meta) {
 sample.name <- gsub (".*/", "", data.dir)
 brain <- Load10X_Spatial (data.dir, filename= "filtered_feature_bc_matrix.h5")
@@ -35,14 +32,19 @@ cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
 idx <- match (cells.use, row.names (brain@meta.data))
 brain@meta.data$location <- "unknown"
 brain@meta.data$location [idx] <- "Hippocampus"
+brain@meta.data$group <- sample.name
 
 return (brain)
 }
 
+data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2C"
+meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
 brain1 <- preprocess (data.dir, meta)
 brain1@meta.data$cell <- paste (row.names(brain1@meta.data), "s1", sep="-")
 
 
+
+#
 counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
 dim (counts)
 
