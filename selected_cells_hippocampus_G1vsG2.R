@@ -73,12 +73,6 @@ saveRDS (brain, "brain_G2G1_groups.rds")
 
 ################
 ## Wilcoxon test
-brain <- readRDS ("brain_G2G1_groups.rds")
-counts <- as.matrix (brain@assays$SCT@data [ ,WhichCells(brain, expression = location == "Hippocampus")])
-dim (counts)
-
-
-## FIXME
 
 # str (brain@assays)
 # raw counts
@@ -94,7 +88,11 @@ dim (counts)
 # max (as.data.frame (counts [ ,1]))
 
 
+brain <- readRDS ("brain_G2G1_groups.rds")
 
+# raw counts
+counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+dim (counts)
 
 
 
