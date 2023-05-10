@@ -62,11 +62,11 @@ brain4 <- preprocess (data.dir, meta)
 # By default, merge() will combine the Seurat objects based on the raw count matrices, erasing any previously normalized and scaled data matrices. 
 # If you want to merge the normalized data matrices as well as the raw count matrices, simply pass merge.data = TRUE. 
 
-DefaultAssay(brain) <- "Spatial"
- 
 brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A", "1C", "1A"))
+
+DefaultAssay(brain) <- "Spatial"
 brain <- JoinLayers (brain)
-brain <- SCTransform(brain, verbose = FALSE)
+brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 saveRDS (brain, "brain_G2G1_groups.rds")
 
 
@@ -77,6 +77,8 @@ brain <- readRDS ("brain_G2G1_groups.rds")
 counts <- as.matrix (brain@assays$SCT@data [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
 
+
+## FIXME
 
 # str (brain@assays)
 # raw counts
