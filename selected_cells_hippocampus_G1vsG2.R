@@ -74,6 +74,9 @@ saveRDS (brain, "brain_G2G1_groups.rds")
 ################
 ## Wilcoxon test
 
+# devtools::install_github("neurorestore/Libra")
+library (Libra)
+
 # str (brain@assays)
 # raw counts
 # counts <- data.matrix (brain[["Spatial"]]$counts)
@@ -94,6 +97,38 @@ brain <- readRDS ("brain_G2G1_groups.rds")
 counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
 # 32264   229
+
+boxplot (apply (counts, 1, mean))
+counts <- counts[apply (counts, 1, mean) > 0.5, ]
+dim (counts)
+# 8061  229
+
+# for backward compatibility
+counts <- as (counts, "sparseMatrix")
+seurat.ss2 <- CreateSeuratObject(counts)
+
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+# we need cell_type, replicate, and label
+meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
+meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
+meta.ss2$cell_type <- "Hippocampus"
+seurat.ss2@meta.data <- meta.ss2
+
+
+res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
+res <- data.frame (res)
+row.names (res) <- res$gene
+res <- merge (res, mymean, by="row.names")
+res <- res[order (res$p_val_adj), ]
+row.names (res) <- res$gene
+# res <- format(res, scientific = TRUE)
+head (res)
+write.table (res, "oligodendrocytes_wilcoxon_analysis_lau.txt", sep="\t", quote=F)
+
+boxplot (res$avg_logFC)
+abline (h=0)
+
+
 
 
 
