@@ -1,6 +1,7 @@
 ## hippocampus of G1 (Sham+Veh) vs G2 (SNI+Veh)  
 
 library (Seurat)
+library (openxlsx)
 
 options(Seurat.object.assay.version = "v5")
 
@@ -115,15 +116,34 @@ meta.ss2$cell_type <- "Hippocampus"
 seurat.ss2@meta.data <- meta.ss2
 
 
+mymean <- data.frame (mean= apply (counts, 1, mean))
+
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
 res <- data.frame (res)
 row.names (res) <- res$gene
 res <- merge (res, mymean, by="row.names")
 res <- res[order (res$p_val_adj), ]
 row.names (res) <- res$gene
-# res <- format(res, scientific = TRUE)
+colnames (res)[1] <- "gene_name"
 head (res)
-write.table (res, "oligodendrocytes_wilcoxon_analysis_lau.txt", sep="\t", quote=F)
+
+
+## Annotation
+
+library('org.Mm.eg.db')
+
+#columns(org.Mm.eg.db)
+symbols <- row.names (res)
+res1a <- mapIds(org.Mm.eg.db, symbols, 'GENENAME', 'SYMBOL')
+
+idx <- match (row.names (res), names (res1a))
+res$Description <- as.vector (res1a) [idx]
+res <- res[order (res$p_val_adj), ]
+res <- res[ ,-which (colnames (res) == "de_family")]
+
+
+
+write.xlsx (res, "hippocampus_selected_cells_wilcoxon_analysis.xlsx", rowNames=F)
 
 boxplot (res$avg_logFC)
 abline (h=0)
