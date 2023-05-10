@@ -59,6 +59,7 @@ brain4 <- preprocess (data.dir, meta)
 # If you want to merge the normalized data matrices as well as the raw count matrices, simply pass merge.data = TRUE. 
 
 brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A", "1C", "1A"))
+brain <- JoinLayers (brain)
 brain <- SCTransform(brain, verbose = FALSE)
 saveRDS (brain, "brain_G2G1_groups.rds")
 
