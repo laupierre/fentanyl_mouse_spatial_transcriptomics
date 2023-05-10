@@ -25,28 +25,44 @@ brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
-return (brain)
-}
-
-brain1 <- preprocess (data.dir, meta)
-
-
-
-
 
 ## FIXME
 
-## keep cells in the right hemisphere and selected in the hippocampus
 meta <- meta[meta$TOTAL == "rHEMI", ]
 meta1 <- meta[meta$Hip != "", ]
 print (dim (meta1))
 
 cells.use <- meta1$Barcode
 cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
+idx <- match (cells.use, row.names (brain@meta.data))
+brain@meta.data$location <- "unknown"
+brain@meta.data$location [idx] <- "Hippocampus"
+
+return (brain)
+}
+
+brain1 <- preprocess (data.dir, meta)
+brain1@meta.data$cell <- paste (row.names(brain1@meta.data), "s1", sep="-")
 
 
-counts <- as.matrix (brain@assays$SCT@data [ ,WhichCells(brain, cells = cells.use)])
+counts <- as.matrix (brain1@assays$SCT@data [ ,WhichCells(brain1, expression = location == "Hippocampus")])
 dim (counts)
+
+brain1@meta.data[WhichCells(brain1, expression = location == "Hippocampus"), ]
+
+
+
+
+
+#
+brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A", "2B", "2D"))
+
+brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+# saveRDS (brain, "brain.G2G4.for.clustering.rds")
+
+
+
+
 
 
 
