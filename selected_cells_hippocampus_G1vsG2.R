@@ -26,8 +26,6 @@ brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
 
-## FIXME
-
 meta <- meta[meta$TOTAL == "rHEMI", ]
 meta1 <- meta[meta$Hip != "", ]
 print (dim (meta1))
