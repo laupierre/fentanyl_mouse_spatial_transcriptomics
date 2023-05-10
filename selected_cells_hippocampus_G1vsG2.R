@@ -24,7 +24,7 @@ brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
-
+colnames (meta)[2] <- "TOTAL"
 meta <- meta[meta$TOTAL == "rHEMI", ]
 meta1 <- meta[meta$Hip != "", ]
 print (dim (meta1))
