@@ -68,17 +68,17 @@ counts <- as.matrix (brain@assays$SCT@data [ ,WhichCells(brain, expression = loc
 dim (counts)
 
 
-# str (brain.merge@assays)
+# str (brain@assays)
 # raw counts
-# counts <- brain.merge@assays$Spatial@counts 
+# counts <- brain@assays$Spatial@counts 
 # max (as.data.frame (counts [ ,1]))
 
 # normalized counts
-# counts <- as.matrix (brain.merge@assays$SCT@data) 
+# counts <- as.matrix (brain@assays$SCT@data) 
 # max (as.data.frame (counts [ ,1]))
 
 # scaled data
-# counts <- as.matrix (brain.merge@assays$SCT@scale.data) 
+# counts <- as.matrix (brain@assays$SCT@scale.data) 
 # max (as.data.frame (counts [ ,1]))
 
 
