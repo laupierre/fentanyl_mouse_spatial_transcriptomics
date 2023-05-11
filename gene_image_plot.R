@@ -1,5 +1,6 @@
 library (Seurat)
 library (ggpubr)
+library(ggrastr)
 
 
 ### Slide 1
@@ -9,12 +10,13 @@ Images (brain)
 # G1-1A, G3-1B, G1-1C, G3-1D
 # "slice1"   "slice1.2" "slice1.3" "slice1.4"
 
-p1c <- SpatialDimPlot(brain, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
+brain@meta.data$orig.ident <- brain@meta.data$location
+
+p1c <- SpatialDimPlot(brain, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE, raster=TRUE) + theme(legend.position = "none")
 p2c <- SpatialDimPlot(brain, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 
-ggarrange(p1c, p2c, nrow=2, labels=c("slices G1", "slices G3"))
-
-
+p <- ggarrange(p1c, p2c, nrow=2, labels=c("slices G1", "slices G3"))
+ggsave ("slide1.pdf")
 
 
 
@@ -25,10 +27,12 @@ Images (brain2)
 # G2-2A, G4-2B, G2-2C, G4-2D
 # "slice1"   "slice1.2" "slice1.3" "slice1.4"
 
-p1c <- SpatialDimPlot(brain2, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
-p2c <- SpatialDimPlot(brain2, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
+p3c <- SpatialDimPlot(brain2, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
+p4c <- SpatialDimPlot(brain2, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 
-ggarrange(p1c, p2c, nrow=2, labels=c("slices G2", "slices G4"))
+ggarrange(p3c, p4c, nrow=2, labels=c("slices G2", "slices G4"))
+ggsave ("slide2.pdf")
+
 
 
 
