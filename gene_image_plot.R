@@ -10,7 +10,6 @@ Images (brain)
 # G1-1A, G3-1B, G1-1C, G3-1D
 # "slice1"   "slice1.2" "slice1.3" "slice1.4"
 
-brain@meta.data$orig.ident <- brain@meta.data$location
 
 p1c <- SpatialDimPlot(brain, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 p2c <- SpatialDimPlot(brain, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
