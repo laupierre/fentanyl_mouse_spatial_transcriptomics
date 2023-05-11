@@ -12,7 +12,7 @@ Images (brain)
 
 brain@meta.data$orig.ident <- brain@meta.data$location
 
-p1c <- SpatialDimPlot(brain, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE, raster=TRUE) + theme(legend.position = "none")
+p1c <- SpatialDimPlot(brain, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 p2c <- SpatialDimPlot(brain, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 
 p <- ggarrange(p1c, p2c, nrow=2, labels=c("slices G1", "slices G3"))
