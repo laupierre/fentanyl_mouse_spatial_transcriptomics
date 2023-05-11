@@ -15,6 +15,7 @@ p1c <- SpatialDimPlot(brain, images=c("slice1", "slice1.3"), label=FALSE, label.
 p2c <- SpatialDimPlot(brain, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 
 p <- ggarrange(p1c, p2c, nrow=2, labels=c("slices G1", "slices G3"))
+p
 ggsave ("slide1.pdf")
 
 
@@ -29,7 +30,8 @@ Images (brain2)
 p3c <- SpatialDimPlot(brain2, images=c("slice1", "slice1.3"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 p4c <- SpatialDimPlot(brain2, images=c("slice1.2", "slice1.4"), label=FALSE, label.size= 5, repel = TRUE) + theme(legend.position = "none")
 
-ggarrange(p3c, p4c, nrow=2, labels=c("slices G2", "slices G4"))
+p <- ggarrange(p3c, p4c, nrow=2, labels=c("slices G2", "slices G4"))
+p
 ggsave ("slide2.pdf")
 
 
