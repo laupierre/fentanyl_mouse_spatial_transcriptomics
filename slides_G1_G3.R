@@ -60,5 +60,13 @@ meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University
 brain4 <- preprocess (data.dir, meta)
 
 
+# By default, merge() will combine the Seurat objects based on the raw count matrices, erasing any previously normalized and scaled data matrices. 
+# If you want to merge the normalized data matrices as well as the raw count matrices, simply pass merge.data = TRUE. 
 
+brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("1A", "1B", "1C", "1D"))
+
+DefaultAssay(brain) <- "Spatial"
+brain <- JoinLayers (brain)
+brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+saveRDS (brain, "brain_slide1_G1G3_groups.rds")
 
