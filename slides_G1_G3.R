@@ -56,7 +56,7 @@ meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University
 brain3 <- preprocess (data.dir, meta)
 
 data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G3-1D"
-meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G3_1D_shmf02", sep=",")
+meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G3_1D_shmf02.csv", sep=",")
 brain4 <- preprocess (data.dir, meta)
 
 
