@@ -186,6 +186,7 @@ res.lim <- topTable(tmp, sort.by = "p", n = Inf)
 res.lim <- res.lim[res.lim$adj.P.Val <= 0.05, ]
 
 resa <- merge (res.wilc, res.lim, by="row.names")
+
 par (mfrow=c(2,1))
 plot (resa$avg_logFC, resa$logFC, xlab="Wilcoxon log fold change", ylab="limma log fold change (G2 vs G1)")
 abline (h=0)
