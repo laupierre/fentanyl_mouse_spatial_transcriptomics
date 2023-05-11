@@ -125,7 +125,7 @@ res <- merge (res, mymean, by="row.names")
 res <- res[order (res$p_val_adj), ]
 row.names (res) <- res$gene
 colnames (res)[1] <- "gene_name"
-
+res.wilc <- res
 
 ## Annotation
 
@@ -146,6 +146,8 @@ boxplot (res$avg_logFC)
 abline (h=0)
 
 
+
+#########
 ## Sanity check (with bulk RNA-Seq)
 
 rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
@@ -159,6 +161,41 @@ write.xlsx (res2, "hippocampus_selected_cells_comparison_rnaseq_vs_wilcoxon_anal
 plot (res2$avg_logFC, res2$Log2.Fold.Change, xlab="Wilcoxon", ylab="Chicago RNA-Seq", col=ifelse (res2$p_val_adj < 0.05, "blue", "black"))
 abline (h=0)
 abline (v=0)
+
+
+
+#########
+## Verification of the log fold change orientation using voom-limma
+
+library (edgeR)
+library (limma)
+
+d0 <- DGEList(counts)
+d0 <- calcNormFactors(d0)
+  
+condition <- meta.ss2$label
+mm <- model.matrix(~0 + condition)
+y <- voom(d0, mm, plot = F)
+fit <- lmFit(y, mm)
+
+# G2 (SNI+Veh) vs G1 (Sham+Veh)
+contr <- makeContrasts(conditionG2 - conditionG1, levels = colnames(coef(fit)))
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+res.lim <- topTable(tmp, sort.by = "p", n = Inf) 
+res.lim <- res.lim[res.lim$adj.P.Val <= 0.05, ]
+
+resa <- merge (res.wilc, res.lim, by="row.names")
+par (mfrow=c(2,1))
+plot (resa$avg_logFC, resa$logFC, xlab="Wilcoxon log fold change", ylab="limma log fold change (G2 vs G1)")
+abline (h=0)
+abline (v=0)
+
+plot (resa$avg_logFC, -resa$logFC, xlab="Wilcoxon log fold change", ylab="limma log fold change (G1 vs G2)")
+abline (h=0)
+abline (v=0)
+
+
 
 
 
