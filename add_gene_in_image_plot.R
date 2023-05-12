@@ -86,8 +86,8 @@ p1 | p1o
 
 ### The scale_fill_gradient version (more control of the colors, i.e each slide has a common range for the gradient)
 
-gene <- "Ttr"
 
+add_image <- function (gene) {
 max_gene <- max (brain[["SCT"]]$data [row.names (brain[["SCT"]]$data) == gene, ])
 midpoint <- max_gene /2
 
@@ -126,7 +126,13 @@ pall2 <- ggarrange (pa1, pa2, nrow=2)
 
 
 pall3 <- pall1 | pall2
+return (pall3)
+}
+
+gene <- "Ttr"
+pall3 <- add_image (gene)
 pall3
+
 ggsave (paste (gene, " version 2 plot.pdf", sep=""), pall3, width=8, height=8)
 
 
