@@ -62,7 +62,7 @@ pa1 <- ggarrange(p1, p2, nrow=2, labels=c("G1", "G3"))
 pa2 <- ggarrange(p3, p4, nrow=2, labels=c("G2", "G4"))
 pa3 <- pa1 | pa2
 pa3
-ggsave (paste (gene, " plot.pdf", sep=""), pa3)
+ggsave (paste (gene, " plot.pdf", sep=""), pa3, width=8, height=8)
 
 
 
