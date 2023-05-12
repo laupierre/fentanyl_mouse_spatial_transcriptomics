@@ -70,6 +70,19 @@ ggsave (paste (gene, " plot.pdf", sep=""), pa3, width=8, height=8)
 
 
 ######
+## see https://stackoverflow.com/questions/70942728/understanding-color-scales-in-ggplot2
+## the original version is based on the viridis palette
+
+p1o <- SpatialFeaturePlot(brain, images=c("slice1"), features = gene)
+p2o <- SpatialFeaturePlot(brain, images=c("slice1"), features = gene) + ggplot2::scale_color_viridis_c(option= "rocket")
+p1o | p2o
+
+p1 | p1o
+
+
+
+
+######
 
 ### The scale_fill_gradient version (more control of the colors, i.e each slide has a common range for the gradient)
 
