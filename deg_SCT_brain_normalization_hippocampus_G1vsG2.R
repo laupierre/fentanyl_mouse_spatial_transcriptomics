@@ -1,4 +1,4 @@
-### SCT is not working well
+### SCT is not working well because it is not centered on line 72 !!
 
 library (Seurat)
 
@@ -68,6 +68,9 @@ head (res)
 table (res$padj < 0.05)
 #FALSE  TRUE 
 # 5624  2944 
+
+boxplot (res$log.fold.change)
+abline (h=0)
 
 
 
