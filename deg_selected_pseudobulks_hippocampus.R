@@ -8,6 +8,8 @@ library (openxlsx)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
+## Here we are normalizing the hippocampus cells only (and not the entire nrain)
+
 # raw counts
 counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
@@ -54,7 +56,7 @@ head (pseudo.counts)
 
 
 
-## Limma chunk (normal voom)
+## Limma chunk (normal voom to normalize the hippocampal pseudobulks) 
 
 d0 <- DGEList(pseudo.counts)
 d0 <- calcNormFactors(d0)
