@@ -98,7 +98,7 @@ abline (v=0)
 ########## SCT log fold changes are compressed relative to hippocampal normalization
 comp2 <- merge (res, sc, by="gene_name") 
 plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison spatial vs bulk transcriptomics",
-      xlim=c(-3,3), ylim=c(-3,3), col=ifelse (comp2$log.fold.change < 0.05, "blue","black"))
+      xlim=c(-3,3), ylim=c(-3,3), col=ifelse (comp2$padj < 0.05, "blue","black"))
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
