@@ -80,7 +80,6 @@ colnames (bulk)[2] <- "gene_name"
 
 
 ## single cell (normalized on selected hippocampal cells)
-
 sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
 # invert the log fold changes
 sc$avg_logFC <- -1*sc$avg_logFC
@@ -94,7 +93,7 @@ abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
 
-
+########## SCT log fold changes are compressed relative to hippocampal normalization
 comp2 <- merge (res, sc, by="gene_name") 
 plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison spatial vs bulk transcriptomics",
       xlim=c(-3,3), ylim=c(-3,3))
