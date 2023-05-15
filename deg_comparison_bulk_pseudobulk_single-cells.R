@@ -14,23 +14,50 @@ sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
 sc$avg_logFC <- -1*sc$avg_logFC
 sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
 
+
+pdf ("Comparison between bulk, pseudobulk and spatial RNA-Seq.pdf")
 par (mfrow= c(3,1))
 comp1 <- merge (sc, pseudo, by="gene_name")
-plot (comp1$avg_logFC, comp1$logFC, xlab="log fold changes wilcoxon (spatial)", ylab="log fold changes limma (pseudobulk)", main="Comparison spatial vs pseudobulk transcriptomics")
+plot (comp1$avg_logFC, comp1$logFC, xlab="log fold changes wilcoxon (spatial)", ylab="log fold changes limma (pseudobulk)", main="Comparison spatial vs pseudobulk transcriptomics",
+      xlim=c(-3,3), ylim=c(-3,3))
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
 
 comp2 <- merge (sc, bulk, by="gene_name")
-plot (comp2$avg_logFC, comp2$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial)", ylab="log fold changes Chicago (bulk)", main="Comparison spatial vs bulk transcriptomics")
+plot (comp2$avg_logFC, comp2$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial)", ylab="log fold changes wald (bulk)", main="Comparison spatial vs bulk transcriptomics",
+     xlim=c(-3,3), ylim=c(-3,3))
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
 
 comp3 <- merge (pseudo, bulk, by="gene_name")
-plot (comp2$logFC, comp2$Log2.Fold.Change, xlab="log fold changes limma (pseudobulk)", ylab="log fold changes Chicago (bulk)", main="Comparison pseudobulk vs bulk transcriptomics")
+plot (comp3$logFC, comp3$Log2.Fold.Change, xlab="log fold changes limma (pseudobulk)", ylab="log fold changes wald (bulk)", main="Comparison pseudobulk vs bulk transcriptomics",
+     xlim=c(-3,3), ylim=c(-3,3))
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
+dev.off ()
+
+
+comp1 <- merge (sc, pseudo, by="gene_name")
+comp2 <- merge (comp1, bulk, by="gene_name")
+comp2$trend <- ifelse (comp2$avg_logFC >0 & comp2$logFC >0 & comp2$Log2.Fold.Change >0, "more_G2", ifelse (comp2$avg_logFC <0 & comp2$logFC <0 & comp2$Log2.Fold.Change <0, "less_G2", "No"))
+table (comp2$trend)
+# less_G2 more_G2      No 
+# 1983    1745    4209
+
+comp2 <- comp2[order (comp2$avg_logFC), ]
+colnames (comp2)[1:5] <- paste (colnames (comp2)[1:5], "wilcoxon", sep="-")
+colnames (comp2)[6:8] <- paste (colnames (comp2)[6:8], "pseudobulk", sep="-")
+colnames (comp2)[9:34] <- paste (colnames (comp2)[9:34], "wald_bulk", sep="-")
+head (comp2)
+
+write.xlsx (comp2, "Comparison between bulk, pseudobulk and spatial RNA-Seq.xlsx", rowNames=F)
+
+
+
+
+
 
 
