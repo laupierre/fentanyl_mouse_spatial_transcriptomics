@@ -34,9 +34,10 @@ abline (h=0)
 res.mean <- res
 
 
-boxplot (apply (counts, 1, mean))
-counts <- counts[apply (counts, 1, mean) > 0.2, ]
-dim (counts)
+#boxplot (apply (counts, 1, mean))
+## The expression normalization is post SCT test (not usual)!! 
+#counts <- counts[apply (counts, 1, mean) > 0.2, ]
+#dim (counts)
 # 8568  229
 
 meta <- meta[row.names (meta) %in% colnames (counts), ]
