@@ -76,6 +76,8 @@ table (res$adj.P.Val < 0.05)
 res.voom <- res
 
 res <- topTable(tmp, sort.by = "p", n = Inf) 
+res <- cbind (data.frame (gene_name= row.names (res), res))
+
 write.xlsx (res, "pseudobulk_hippocampus_selected_cells.xlsx", rowNames=F)
 
 
