@@ -20,7 +20,7 @@ dim (counts)
 
 
 meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
-# we need cell_type, replicate, and label
+# we need cell_type (hippocampus), replicate (mouse origin), and label (treatment, i.e G2 or G1 groups)
 meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
 meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
 meta.ss2$cell_type <- "Hippocampus"
@@ -38,6 +38,7 @@ mymean <- data.frame (mean= apply (counts, 1, mean))
 
 meta$mouse <- paste (meta$replicate, meta$label, sep=":")
 mouse <- unique (meta$mouse)
+# "2C:G2" "2A:G2" "1C:G1" "1A:G1"
 
 mat <- list ()
 for (i in (1:length (mouse))) {
@@ -53,20 +54,30 @@ head (pseudo.counts)
 
 
 
-
-
-
-
-library (edgeR)
-library (limma)
+## Limma chunk (normal voom)
 
 d0 <- DGEList(pseudo.counts)
 d0 <- calcNormFactors(d0)
-  
-condition <- c (rep ("A", 3), rep ("B", 3))
 
+condition <- gsub (".*:", "", colnames (pseudo.counts))
 mm <- model.matrix(~0 + condition)
 
 y <- voom(d0, mm, plot = T)
+
+fit <- lmFit(y, mm)
+contr <- makeContrasts(conditionG2 - conditionG1 , levels = colnames(coef(fit)))
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+res <- topTable(tmp, sort.by = "p", n = Inf) 
+res <- res[res$adj.P.Val <= 0.05, ]
+
+table (res$adj.P.Val < 0.05)
+# 5
+
+## 
+
+
+
+
 
 
