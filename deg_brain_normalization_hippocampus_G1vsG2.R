@@ -56,13 +56,23 @@ resl[[i]] <- res
 }
 
 res <- do.call ("rbind", resl)
-colnames (res)[1] <- "pval.wilcox"
-res <- merge (res.mean, res, by="row.names") 
+colnames (res)[2] <- "pval.wilcox"
+res <- merge (res.mean, res, by.x="row.names", by.y="gene_name") 
 res$padj <- p.adjust (res$pval.wilcox, method="BH")
+res <- res[order (res$padj), ]
+colnames (res)[1] <- "gene_name"
+head (res)
 
 table (res$padj < 0.05)
 #FALSE  TRUE 
 # 5624  2944 
+
+
+
+#########
+## Sanity check. comparison with bulk RNA-Seq and normalization on selected cells
+
+
 
 
 
