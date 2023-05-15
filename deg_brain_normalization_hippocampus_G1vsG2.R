@@ -44,7 +44,7 @@ counts.s2 <- counts[ ,grepl("G2", meta$group)]
 
 resl <- list ()
 for (i in (1:dim(counts.s1)[1])) {
-res <- wilcox.test(counts.s1[i, ], counts.s2[i ,])
+res <- wilcox.test(counts.s1[i, ], counts.s2[i ,], exact=FALSE)
 resl[[i]] <- res$p.value
 }
 
