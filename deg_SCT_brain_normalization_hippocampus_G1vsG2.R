@@ -1,4 +1,4 @@
-### SCT is not working well because it is not centered on line 72 !!
+### SCT is not working well because significant genes are not symetrical 
 
 library (Seurat)
 
