@@ -32,5 +32,6 @@ colnames (res)[3] <- "log.fold.change"
 head (res)
 
 
-counts.s <- data.frame (cbind (counts[i, ], data.frame (meta
-head (counts[1, ]
+## For wilcoxon test, see http://www.sthda.com/english/wiki/unpaired-two-samples-wilcoxon-test-in-r
+
+
