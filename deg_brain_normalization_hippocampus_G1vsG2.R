@@ -72,6 +72,36 @@ table (res$padj < 0.05)
 #########
 ## Sanity check. comparison with bulk RNA-Seq and normalization on selected cells
 
+library (openxlsx)
+
+## bulk RNA-Seq
+bulk <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
+colnames (bulk)[2] <- "gene_name"
+
+
+## single cell (normalized on selected hippocampal cells)
+
+sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
+# invert the log fold changes
+sc$avg_logFC <- -1*sc$avg_logFC
+sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
+
+
+comp1 <- merge (res, bulk, by="gene_name") 
+plot (comp1$log.fold.change, comp1$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial)", ylab="log fold changes wald (bulk)", main="Comparison spatial vs bulk transcriptomics",
+      xlim=c(-3,3), ylim=c(-3,3))
+abline (0,1, col="red")
+abline (h=0)
+abline (v=0)
+
+
+comp2 <- merge (res, sc, by="gene_name") 
+plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison spatial vs bulk transcriptomics",
+      xlim=c(-3,3), ylim=c(-3,3))
+abline (0,1, col="red")
+abline (h=0)
+abline (v=0)
+
 
 
 
