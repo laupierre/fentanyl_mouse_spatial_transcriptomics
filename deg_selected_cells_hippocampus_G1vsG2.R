@@ -74,6 +74,7 @@ saveRDS (brain, "brain_G2G1_groups.rds")
 
 ################
 ## Wilcoxon test
+## Here we are normalizing on the selected cells only after extracting the raw counts from these cells
 
 # devtools::install_github("neurorestore/Libra")
 library (Libra)
