@@ -4,7 +4,7 @@ library (Libra)
 library (Seurat)
 library (edgeR)
 library (limma)
-
+library (openxlsx)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
@@ -73,8 +73,60 @@ res <- res[res$adj.P.Val <= 0.05, ]
 
 table (res$adj.P.Val < 0.05)
 # 5
+res.voom <- res
 
-## 
+res <- topTable(tmp, sort.by = "p", n = Inf) 
+write.xlsx (res, "pseudobulk_hippocampus_selected_cells.xlsx", rowNames=F)
+
+
+
+## No main differences when compared to the alternative methods 
+## voomQW with sample variability
+y <- voomWithQualityWeights(d0, design = mm, plot = TRUE)
+fit <- lmFit(y, mm)
+contr <- makeContrasts(conditionG2 - conditionG1 , levels = colnames(coef(fit)))
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+res <- topTable(tmp, sort.by = "p", n = Inf) 
+res <- res[res$adj.P.Val < 0.05, ]
+
+table (res$adj.P.Val < 0.05)
+# 5
+res.voomQW <- res
+
+
+
+## voomQW with block variability
+y <- voomWithQualityWeights(d0, design = mm, var.group=condition , plot = TRUE)
+fit <- lmFit(y, mm)
+contr <- makeContrasts(conditionG2 - conditionG1 , levels = colnames(coef(fit)))
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+res <- topTable(tmp, sort.by = "p", n = Inf) 
+res <- res[res$adj.P.Val < 0.05, ]
+
+table (res$adj.P.Val < 0.05)
+# 5
+res.voomQWB <- res
+
+
+
+## voomQW with group variability
+## see the group-specific mean-variance plots to assess the usage of this method
+# system ("git clone https://github.com/YOU-k/voomByGroup.git")
+source ("~/voomByGroup/voomByGroup.R")
+
+y <- voomByGroup(d0, design = mm, group=condition , plot = "all")
+fit <- lmFit(y, mm)
+contr <- makeContrasts(conditionG2 - conditionG1 , levels = colnames(coef(fit)))
+tmp <- contrasts.fit(fit, contr)
+tmp <- eBayes(tmp)
+res <- topTable(tmp, sort.by = "p", n = Inf) 
+res <- res[res$adj.P.Val < 0.05, ]
+
+table (res$adj.P.Val < 0.05)
+# 4
+res.voomG <- res
 
 
 
