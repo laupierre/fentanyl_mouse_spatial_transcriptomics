@@ -69,7 +69,15 @@ write.xlsx (res, "hippocampus_G4vsG2_selected_cells_wilcoxon_analysis.xlsx", row
 
 brain.n <- read.xlsx ("hippocampus_G4vsG2_selected_cells_brain_normalization_wilcoxon_analysis.xlsx")
 
+comp2 <- merge (res, brain.n, by="gene_name") 
 
+pdf ("Comparison hippocampus and normalization methods G4 vs G2.pdf")
+plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison hippocampus and normalization methods",
+      xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$padj < 0.05, "blue","black"))
+abline (0,1, col="red")
+abline (h=0)
+abline (v=0)
+dev.off ()
 
 
 
