@@ -12,7 +12,7 @@ counts <- as.matrix (brain[["SCT"]]$data [ ,WhichCells(brain, expression = locat
 dim (counts)
 # 18827   229
 
-
+## There's no low expression filtering here!
 ## manual calculation of SCT log fold changes and wilcoxon test of SCT values
 
 meta <- brain [ ,WhichCells(brain, expression = location == "Hippocampus")]@meta.data
