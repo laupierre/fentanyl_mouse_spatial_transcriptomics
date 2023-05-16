@@ -75,13 +75,14 @@ library (openxlsx)
 bulk <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
 colnames (bulk)[2] <- "gene_name"
 
+pdf ("Comparison spatial SCT and RNA-Seq methods G2 vs G1.pdf")
 comp1 <- merge (res, bulk, by="gene_name") 
-plot (comp1$log.fold.change, comp1$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial SCT normalization)", ylab="log fold changes wald (bulk)", main="Comparison spatial vs bulk transcriptomics",
+plot (comp1$log.fold.change, comp1$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial SCT normalization)", ylab="log fold changes wald (bulk)", main="Comparison spatial SCT vs bulk transcriptomics",
       xlim=c(-3,3), ylim=c(-3,3))
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
-
+dev.off ()
 
 
 ## single cell (after lognorm normalization on selected hippocampal cells)
