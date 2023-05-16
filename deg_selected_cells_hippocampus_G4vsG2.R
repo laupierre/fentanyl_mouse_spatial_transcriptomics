@@ -65,4 +65,18 @@ write.xlsx (res, "hippocampus_G4vsG2_selected_cells_wilcoxon_analysis.xlsx", row
 
 
 
+## Sanity check (comparison with brain normalization)
+
+brain.n <- read.xlsx ("hippocampus_G4vsG2_selected_cells_brain_normalization_wilcoxon_analysis.xlsx")
+
+
+
+
+
+
+
+
+
+
+
 
