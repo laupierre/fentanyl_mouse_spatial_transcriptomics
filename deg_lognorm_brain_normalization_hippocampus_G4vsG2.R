@@ -1,4 +1,4 @@
-## This was taken from: deg_lognorm_brain_normalization_hippocampus_G1vsG2.R
+## This was taken from: deg_lognorm_brain_normalization_hippocampus_G2vsG1.R
 
 library (Seurat)
 library (scuttle)
