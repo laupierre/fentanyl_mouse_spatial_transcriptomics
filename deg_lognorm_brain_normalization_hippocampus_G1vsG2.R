@@ -3,33 +3,49 @@
 library (Seurat)
 library (scuttle)
 library(scran)
+library (scater)
 library (SingleCellExperiment)
+
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 brain
 
-counts <- brain[["Spatial"]]$counts
-dim (counts)
+#counts <- brain[["Spatial"]]$counts
+#colData <- brain@meta.data
+#sce <- SingleCellExperiment(assays = list(counts = counts, colData=colData))
 
-colData <- brain@meta.data
+# The counts slot of the "SCT" assay is supposed to be adjusted/corrected counts derived by reverse-transforming the Pearson residuals
+# The counts slot of the "RNA" assay, on the other hand, would just have the raw counts read from the UMI data
+# So, they can be different, and I think in your case, the SCT-normalized corrected counts for some of the genes you mentioned end up increasing post normalization. 
+# Essentially, the SCT@counts may be viewed as the normalized versions of the RNA@counts based on the SCT technique
 
-sce <- SingleCellExperiment(assays = list(counts = counts, colData=colData))
+#counts <- brain[["Spatial"]]$counts
+#head (counts [ ,1:10])
 
+#counts <- brain[["SCT"]]$counts
+#head (counts [ ,1:10])
 
+# this parses the sequencing depth corrected counts from SCT, ie $counts
+sce <- as.SingleCellExperiment(brain)
+head (counts(sce) [ ,1:10])
 
-
-dim (counts (sce)[ ,1:10])
-
-
-# add a low expression filtering here
+# add a low expression gene filtering
 ave.counts <- rowMeans(counts(sce)) 
 
-# look at a chosen log10 threshold, here 1
+# look at a chosen log10 threshold, here 0.05, with log10 (0.05) = -1.3
 hist(log10(ave.counts), breaks=100, main="", col="grey80", xlab= expression(Log[10]~"average count"))
-abline(v=log10(1), col="blue", lwd=2, lty=2)
+abline(v=log10(0.05), col="blue", lwd=2, lty=2)
 
-keep <- sce[ ,ave.counts >= 1]
-sum(keep)
+sce <- sce[ave.counts >= 0.05, ]
+sce
+
+
+# or select genes that have non-zero counts in at least n cells (ie 1000)
+
+#numcells <- nexprs(sce, byrow=TRUE)
+#alt.keep <- numcells >= 1000
+#sum(alt.keep)
+#smoothScatter(log10(ave.counts), numcells, xlab=expression(Log[10]~"average count"), ylab="Number of expressing cells")
 
 
 clusters <- quickCluster(sce)
