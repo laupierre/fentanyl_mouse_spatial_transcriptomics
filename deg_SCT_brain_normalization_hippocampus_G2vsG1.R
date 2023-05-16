@@ -29,6 +29,9 @@ res <- cbind (data.frame (mean.s2), data.frame (mean.s1))
 res <-  cbind (res, data.frame (log.fold.change= res$mean.s2 - res$mean.s1))
 colnames (res)[3] <- "log.fold.change"
 
+res <- res[res$mean.s2 != 0 & res$mean.s1 != 0, ]
+#table (res$mean.s2 == 0 & res$mean.s1 == 0)
+
 boxplot (res$log.fold.change)
 abline (h=0)
 res.mean <- res
@@ -56,7 +59,7 @@ head (res)
 
 table (res$padj < 0.05)
 #FALSE  TRUE 
-#14007  2637 
+#12069  2732  
 
 boxplot (res$log.fold.change)
 abline (h=0)
@@ -64,7 +67,7 @@ abline (h=0)
 
 
 #########
-## Sanity check. comparison with bulk RNA-Seq and normalization on selected cells
+## Sanity check. comparison with bulk RNA-Seq and after normalization on selected cells
 
 library (openxlsx)
 
@@ -81,21 +84,21 @@ abline (v=0)
 
 
 
-## single cell (normalized on selected hippocampal cells)
-sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
+## single cell (after lognorm normalization on selected hippocampal cells)
+sc <- read.xlsx ("hippocampus_G2vsG1_selected_cells_wilcoxon_analysis.xlsx")
 # invert the log fold changes
-sc$avg_logFC <- -1*sc$avg_logFC
+#sc$avg_logFC <- -1*sc$avg_logFC
 sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
 
 comp2 <- merge (res, sc, by="gene_name") 
-plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison spatial vs bulk transcriptomics",
+plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (SCT normalization)", ylab="log fold changes wilcoxon (lognorm normalization)", main="Comparison SCT vs lognorm normalizations",
       xlim=c(-3,3), ylim=c(-3,3), col=ifelse (comp2$padj < 0.05, "blue","black"))
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
 
-### SCT log fold changes are more compressed relative to hippocampal normalization
-### There are more significant genes, most of them are down-regulated (assymmetrical), G1 > G2
+### SCT log fold changes are more compressed relative to lognorm normalization
+### There are more significant genes with SCT, most of them are down-regulated (assymmetrical), G1 > G2
 
 
 
