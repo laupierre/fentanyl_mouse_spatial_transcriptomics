@@ -182,11 +182,12 @@ rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean
 res2 <- merge (res, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
 head (res2)
 
-write.xlsx (res2, "hippocampus_selected_cells_comparison_rnaseq_vs_wilcoxon_analysis.xlsx", rowNames=F)
-
-plot (res2$avg_logFC, res2$Log2.Fold.Change, xlab="Wilcoxon", ylab="Chicago RNA-Seq", col=ifelse (res2$p_val_adj < 0.05, "blue", "black"))
+pdf ("Comparison spatial and RNA-Seq methods G2 vs G1.pdf")
+plot (res2$avg_logFC, res2$Log2.Fold.Change, xlab="Spatial log fold changes Wilcoxon", ylab="Chicago log fold changes RNA-Seq", main="Comparison spatial and RNA-Seq methods", 
+     xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$padj < 0.05, "blue","black"))
 abline (h=0)
 abline (v=0)
+dev.off ()
 
 
 
