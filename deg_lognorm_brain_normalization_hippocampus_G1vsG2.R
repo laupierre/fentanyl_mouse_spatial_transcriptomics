@@ -3,13 +3,34 @@
 library (Seurat)
 library (scuttle)
 library(scran)
+library (SingleCellExperiment)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 brain
 
-sce <- as.SingleCellExperiment(brain)
+counts <- brain[["Spatial"]]$counts
+dim (counts)
 
-# add expression filtering here
+colData <- brain@meta.data
+
+sce <- SingleCellExperiment(assays = list(counts = counts, colData=colData))
+
+
+
+
+dim (counts (sce)[ ,1:10])
+
+
+# add a low expression filtering here
+ave.counts <- rowMeans(counts(sce)) 
+
+# look at a chosen log10 threshold, here 1
+hist(log10(ave.counts), breaks=100, main="", col="grey80", xlab= expression(Log[10]~"average count"))
+abline(v=log10(1), col="blue", lwd=2, lty=2)
+
+keep <- sce[ ,ave.counts >= 1]
+sum(keep)
+
 
 clusters <- quickCluster(sce)
 
