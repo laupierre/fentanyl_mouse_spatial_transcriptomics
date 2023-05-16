@@ -2,12 +2,11 @@
 
 library (Seurat)
 
-
 brain <- readRDS ("brain_G2G1_groups.rds")
 
 
 ########## SCT normalized data
-## extract SCT data
+## extract the SCT hippocampus data directly
 counts <- as.matrix (brain[["SCT"]]$data [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
 # 18827   229
