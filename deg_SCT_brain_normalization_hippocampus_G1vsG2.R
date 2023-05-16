@@ -35,7 +35,7 @@ res.mean <- res
 
 
 #boxplot (apply (counts, 1, mean))
-## The expression normalization is post SCT test (not usual)!! 
+## The expression filtering is post SCT test (which is not usual)!! 
 #counts <- counts[apply (counts, 1, mean) > 0.2, ]
 #dim (counts)
 # 8568  229
