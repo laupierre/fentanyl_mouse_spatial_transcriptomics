@@ -1,5 +1,6 @@
 library (Libra)
 library (Seurat)
+library (openxlsx)
 
 brain <- readRDS ("brain_slide2_G2G4_groups.rds")
 
@@ -44,4 +45,24 @@ res <- res[order (res$p_val_adj), ]
 row.names (res) <- res$gene
 colnames (res)[1] <- "gene_name"
 res$avg_logFC <- -1 * res$avg_logFC
+
+
+## Annotation
+
+library('org.Mm.eg.db')
+
+#columns(org.Mm.eg.db)
+symbols <- row.names (res)
+res1a <- mapIds(org.Mm.eg.db, symbols, 'GENENAME', 'SYMBOL')
+
+idx <- match (row.names (res), names (res1a))
+res$Description <- as.vector (res1a) [idx]
+res <- res[order (res$p_val_adj), ]
+res <- res[ ,-which (colnames (res) == "de_family")]
+
+write.xlsx (res, "hippocampus_G4vsG2_selected_cells_wilcoxon_analysis.xlsx", rowNames=F)
+
+
+
+
 
