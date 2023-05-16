@@ -64,6 +64,7 @@ write.xlsx (res, "hippocampus_G3vsG1_selected_cells_wilcoxon_analysis.xlsx", row
 
 
 
+#########
 ## Sanity check (comparison with brain normalization)
 
 brain.n <- read.xlsx ("hippocampus_G3vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx")
@@ -77,6 +78,25 @@ abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
 dev.off ()
+
+
+
+#########
+## Sanity check (comparison with bulk RNA-Seq)
+
+rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
+rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean")]
+
+res2 <- merge (res, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
+head (res2)
+
+pdf ("Comparison spatial and RNA-Seq methods G3 vs G1.pdf")
+plot (res2$avg_logFC, res2$Log2.Fold.Change, xlab="Spatial log fold changes Wilcoxon", ylab="Chicago log fold changes RNA-Seq", main="Comparison spatial and RNA-Seq methods", 
+     xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$padj < 0.05, "blue","black"))
+abline (h=0)
+abline (v=0)
+dev.off ()
+
 
 
 
