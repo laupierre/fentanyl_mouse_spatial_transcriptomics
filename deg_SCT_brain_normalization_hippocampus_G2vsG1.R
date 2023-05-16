@@ -67,7 +67,7 @@ abline (h=0)
 
 
 #########
-## Sanity check. comparison with bulk RNA-Seq and after normalization on selected cells
+## Sanity check. comparison with bulk RNA-Seq and after SCT normalization on selected cells
 
 library (openxlsx)
 
