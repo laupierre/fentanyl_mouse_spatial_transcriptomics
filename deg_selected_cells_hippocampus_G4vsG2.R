@@ -1,1 +1,47 @@
+library (Libra)
+library (Seurat)
+
+brain <- readRDS ("brain_slide2_G2G4_groups.rds")
+
+# raw counts
+counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+dim (counts)
+# 18637   211
+
+counts <- counts[apply (counts, 1, mean) > 0.05, ]
+dim (counts)
+# 11907   211
+
+
+# for backward compatibility
+counts <- as (counts, "sparseMatrix")
+seurat.ss2 <- CreateSeuratObject(counts)
+
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+# we need cell_type, replicate, and label
+meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
+meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
+meta.ss2$cell_type <- "Hippocampus"
+
+meta.ss2 <- meta.ss2[row.names (meta.ss2) %in% colnames (counts), ]
+idx <- match (row.names (meta.ss2), colnames (counts))
+meta.ss2 <- meta.ss2[idx, ]
+stopifnot (row.names (meta.ss2) == colnames (counts))
+
+seurat.ss2@meta.data <- meta.ss2
+table (seurat.ss2@meta.data$label)   # It will compare G2 vs G4
+# G2  G4 
+#109 102 
+
+mymean <- data.frame (mean= apply (counts, 1, mean))
+
+
+res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
+res <- data.frame (res)
+row.names (res) <- res$gene
+res <- merge (res, mymean, by="row.names")
+res <- res[order (res$p_val_adj), ]
+row.names (res) <- res$gene
+colnames (res)[1] <- "gene_name"
+res$avg_logFC <- -1 * res$avg_logFC
 
