@@ -18,7 +18,7 @@ counts <- as (counts, "sparseMatrix")
 seurat.ss2 <- CreateSeuratObject(counts)
 
 meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
-# we need cell_type, replicate, and label
+# we need cell_type (eg hippocampus), replicate (eg mouse), and label (eg treatment)
 meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
 meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
 meta.ss2$cell_type <- "Hippocampus"
