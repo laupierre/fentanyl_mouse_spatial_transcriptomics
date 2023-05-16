@@ -1,4 +1,5 @@
-### SCT is not working well because significant genes are not symmetrical 
+### SCT is not working well because there are many significant genes that are not symmetrical 
+### This may be due to the batch in the experimental design
 
 library (Seurat)
 
