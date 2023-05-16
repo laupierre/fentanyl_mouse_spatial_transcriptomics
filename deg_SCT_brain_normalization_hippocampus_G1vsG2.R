@@ -94,7 +94,9 @@ abline (h=0)
 abline (v=0)
 
 ### SCT log fold changes are more compressed relative to hippocampal normalization
-### There are more significant genes, most of them are down-regulated (assymmetrical)
+### There are more significant genes, most of them are down-regulated (assymmetrical), G1 > G2
+
+
 
 
 
