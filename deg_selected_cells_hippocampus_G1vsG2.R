@@ -212,8 +212,10 @@ tmp <- eBayes(tmp)
 res.lim <- topTable(tmp, sort.by = "p", n = Inf) 
 res.lim <- res.lim[res.lim$adj.P.Val <= 0.05, ]
 
-resa <- merge (res.wilc, res.lim, by="row.names")
+resa <- merge (res, res.lim, by="row.names")
 
+
+## With this G2 vs G1 comparison, we have the same trend
 par (mfrow=c(2,1))
 plot (resa$avg_logFC, resa$logFC, xlab="Wilcoxon log fold change", ylab="limma log fold change (G2 vs G1)")
 abline (h=0)
