@@ -5,8 +5,8 @@ library (Seurat)
 brain <- readRDS ("brain_G2G1_groups.rds")
 
 
-########## SCT normalized data
-## extract the SCT hippocampus data directly
+####### SCT normalized data
+## extract the SCT hippocampus normalized data directly
 counts <- as.matrix (brain[["SCT"]]$data [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
 # 18827   229
@@ -71,13 +71,6 @@ library (openxlsx)
 bulk <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
 colnames (bulk)[2] <- "gene_name"
 
-## single cell (normalized on selected hippocampal cells)
-sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
-# invert the log fold changes
-sc$avg_logFC <- -1*sc$avg_logFC
-sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
-
-
 comp1 <- merge (res, bulk, by="gene_name") 
 plot (comp1$log.fold.change, comp1$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial)", ylab="log fold changes wald (bulk)", main="Comparison spatial vs bulk transcriptomics",
       xlim=c(-3,3), ylim=c(-3,3))
@@ -87,7 +80,12 @@ abline (v=0)
 
 
 
-### SCT log fold changes are compressed relative to hippocampal normalization
+## single cell (normalized on selected hippocampal cells)
+sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
+# invert the log fold changes
+sc$avg_logFC <- -1*sc$avg_logFC
+sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
+
 
 comp2 <- merge (res, sc, by="gene_name") 
 plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison spatial vs bulk transcriptomics",
@@ -95,6 +93,11 @@ plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (b
 abline (0,1, col="red")
 abline (h=0)
 abline (v=0)
+
+### SCT log fold changes are more compressed relative to hippocampal normalization
+### There are more significant genes, most of them are down-regulated (assymmetrical)
+
+
 
 
 
