@@ -86,7 +86,6 @@ sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
 sc$avg_logFC <- -1*sc$avg_logFC
 sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
 
-
 comp2 <- merge (res, sc, by="gene_name") 
 plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (brain norm)", ylab="log fold changes wilcoxon (hippocampus norm)", main="Comparison spatial vs bulk transcriptomics",
       xlim=c(-3,3), ylim=c(-3,3), col=ifelse (comp2$padj < 0.05, "blue","black"))
