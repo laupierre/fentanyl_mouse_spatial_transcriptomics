@@ -85,7 +85,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val <= 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 2
+# 44
 res.voom <- res
 
 res <- topTable(tmp, sort.by = "p", n = Inf) 
@@ -108,7 +108,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val < 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 2
+# 43
 res.voomQW <- res
 
 
@@ -123,7 +123,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val < 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 2
+# 43
 res.voomQWB <- res
 
 
@@ -142,7 +142,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val < 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 2
+# 32
 res.voomG <- res
 
 
