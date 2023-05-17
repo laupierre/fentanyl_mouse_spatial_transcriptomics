@@ -153,36 +153,6 @@ write.xlsx (res, "table 4. hippocampus_G2vsG1_selected_cells_brain_normalization
 
 
 
-## Sanity check (with bulk RNA-Seq)
-
-rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
-rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean")]
-
-res2 <- merge (res, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
-
-# write.xlsx (res2, "hippocampus_selected_cells_comparison_rnaseq_vs_wilcoxon_analysis_brain_normalization.xlsx", rowNames=F)
-
-plot (res2$log.fold.change, res2$Log2.Fold.Change, xlab="Wilcoxon brain normalization", ylab="Chicago RNA-Seq", col=ifelse (res2$padj < 0.05, "blue", "black"),
-      xlim=c(-3,3), ylim=c(-3,3))
-abline (h=0)
-abline (v=0)
-
-
-
-## single cell (normalized on selected hippocampal cells and not on the entire brain)
-sc <- read.xlsx ("hippocampus_selected_cells_wilcoxon_analysis.xlsx")
-# invert the log fold changes
-sc$avg_logFC <- -1*sc$avg_logFC
-sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
-
-comp1 <- merge (res, sc, by="gene_name") 
-plot (comp1$log.fold.change, comp1$avg_logFC, xlab="wilcoxon brain normalization", ylab="wilcoxon hippocampus normalization", main="Comparison spatial vs bulk transcriptomics",
-      col=ifelse (comp1$padj < 0.05, "blue", "black"),
-      xlim=c(-3,3), ylim=c(-3,3))
-abline (0,1, col="red")
-abline (h=0)
-abline (v=0)
-
 
 
 
