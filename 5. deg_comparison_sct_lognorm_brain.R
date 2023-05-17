@@ -95,6 +95,64 @@ dev.off ()
 
 
 
+######### Comparison lognorm on entire brain and Bulk RNA-Seq
+rm (list= ls ())
+
+log.n <- read.xlsx ("table 4. hippocampus_G2vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx")
+
+rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
+rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean")]
+
+comp2 <- merge (log.n, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
+
+pdf ("figure 7. Comparison lognorm entire brain and Bulk RNA-Seq G2 vs G1.pdf")
+plot (comp2$log.fold.change, comp2$Log2.Fold.Change, xlab="logFC wilcoxon (lognorm on entire brain)", ylab="logFC (Bulk RNA-Seq)", main="Comparison lognorm entire brain and bulk RNA-Seq methods",
+      xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$padj < 0.05 | comp2$FDR.Adj.p.Value < 0.05, "blue","black"))
+abline (0,1, col="red")
+abline (h=0)
+abline (v=0)
+dev.off ()
+
+
+
+######### Comparison lognorm on hippocampal cells and Bulk RNA-Seq
+rm (list= ls ())
+
+log.n <- read.xlsx ("table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx")
+
+rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
+rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean")]
+
+comp2 <- merge (log.n, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
+
+pdf ("figure 8. Comparison lognorm on selected cells and Bulk RNA-Seq G2 vs G1.pdf")
+plot (comp2$avg_logFC, comp2$Log2.Fold.Change, xlab="logFC wilcoxon (lognorm on selected cells)", ylab="logFC (Bulk RNA-Seq)", main="Comparison lognorm entire brain and bulk RNA-Seq methods",
+      xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$p_val_adj < 0.05 | comp2$FDR.Adj.p.Value < 0.05, "blue","black"))
+abline (0,1, col="red")
+abline (h=0)
+abline (v=0)
+dev.off ()
+
+
+
+######### Comparison SCT normalization cells and Bulk RNA-Seq
+rm (list= ls ())
+
+sct <- read.xlsx ("table 7. hippocampus_G2vsG1_selected_cells_sct_brain_normalization_wilcoxon_analysis.xlsx")
+
+rnaseq <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
+rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean")]
+
+comp2 <- merge (sct, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
+
+pdf ("figure 9. Comparison SCT normalization and Bulk RNA-Seq G2 vs G1.pdf")
+plot (comp2$log.fold.change, comp2$Log2.Fold.Change, xlab="logFC wilcoxon (lognorm on selected cells)", ylab="logFC (Bulk RNA-Seq)", main="Comparison SCT entire brain and bulk RNA-Seq methods",
+      xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$padj < 0.05 | comp2$FDR.Adj.p.Value < 0.05, "blue","black"))
+abline (0,1, col="red")
+abline (h=0)
+abline (v=0)
+dev.off ()
+
 
 
 
