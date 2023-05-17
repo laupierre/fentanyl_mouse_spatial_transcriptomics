@@ -46,8 +46,9 @@ comp1 <- merge (sc, pseudo, by="gene_name")
 comp2 <- merge (comp1, bulk, by="gene_name")
 comp2$trend <- ifelse (comp2$avg_logFC >0 & comp2$logFC >0 & comp2$Log2.Fold.Change >0, "more_G2", ifelse (comp2$avg_logFC <0 & comp2$logFC <0 & comp2$Log2.Fold.Change <0, "less_G2", "No"))
 table (comp2$trend)
-# less_G2 more_G2      No 
-# 1983    1745    4209
+#less_G2 more_G2      No 
+#   2933    3066    6159 
+
 
 comp2 <- comp2[order (comp2$avg_logFC), ]
 colnames (comp2)[1:5] <- paste (colnames (comp2)[1:5], "wilcoxon", sep="-")
@@ -55,7 +56,7 @@ colnames (comp2)[6:8] <- paste (colnames (comp2)[6:8], "pseudobulk", sep="-")
 colnames (comp2)[9:34] <- paste (colnames (comp2)[9:34], "wald_bulk", sep="-")
 head (comp2)
 
-write.xlsx (comp2, "Comparison between bulk, pseudobulk and spatial RNA-Seq.xlsx", rowNames=F)
+write.xlsx (comp2, "table 10. Comparison between bulk, pseudobulk and spatial RNA-Seq.xlsx", rowNames=F)
 
 
 
