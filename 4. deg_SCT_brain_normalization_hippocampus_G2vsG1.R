@@ -11,6 +11,7 @@
 
 library (sctransform)
 library (Seurat)
+library (openxlsx)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
