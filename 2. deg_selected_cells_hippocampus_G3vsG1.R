@@ -60,12 +60,11 @@ res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$p_val_adj), ]
 res <- res[ ,-which (colnames (res) == "de_family")]
 
-write.xlsx (res, "hippocampus_G3vsG1_selected_cells_wilcoxon_analysis.xlsx", rowNames=F)
+write.xlsx (res, "table 2. hippocampus_G3vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
 
 
 
-#########
-## Sanity check (comparison with brain normalization)
+######### Sanity check (comparison with lognorm brain normalization)
 
 brain.n <- read.xlsx ("hippocampus_G3vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx")
 
