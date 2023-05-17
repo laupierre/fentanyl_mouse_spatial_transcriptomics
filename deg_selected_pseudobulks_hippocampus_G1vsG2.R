@@ -21,9 +21,9 @@ dim (counts)
 # 18827   229
 
 boxplot (apply (counts, 1, mean))
-counts <- counts[apply (counts, 1, mean) > 0.5, ]
+counts <- counts[apply (counts, 1, mean) > 0.05, ]
 dim (counts)
-# 8061  229
+# 12381   229
 
 
 meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
@@ -45,7 +45,9 @@ mymean <- data.frame (mean= apply (counts, 1, mean))
 
 meta$mouse <- paste (meta$replicate, meta$label, sep=":")
 mouse <- unique (meta$mouse)
+mouse
 # "2C:G2" "2A:G2" "1C:G1" "1A:G1"
+
 
 mat <- list ()
 for (i in (1:length (mouse))) {
@@ -61,7 +63,7 @@ head (pseudo.counts)
 
 
 
-## Limma chunk (normal voom to normalize the hippocampal pseudobulks) 
+## Limma chunk (use the normal voom to normalize the hippocampal pseudobulks) 
 
 d0 <- DGEList(pseudo.counts)
 d0 <- calcNormFactors(d0)
@@ -79,13 +81,13 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val <= 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 5
+# 2
 res.voom <- res
 
 res <- topTable(tmp, sort.by = "p", n = Inf) 
 res <- cbind (data.frame (gene_name= row.names (res), res))
 
-write.xlsx (res, "pseudobulk_hippocampus_selected_cells.xlsx", rowNames=F)
+write.xlsx (res, "pseudobulk_hippocampus_lognorm_selected_cells.xlsx", rowNames=F)
 
 
 
@@ -102,7 +104,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val < 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 5
+# 2
 res.voomQW <- res
 
 
@@ -117,7 +119,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val < 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 5
+# 2
 res.voomQWB <- res
 
 
@@ -136,7 +138,7 @@ res <- topTable(tmp, sort.by = "p", n = Inf)
 res <- res[res$adj.P.Val < 0.05, ]
 
 table (res$adj.P.Val < 0.05)
-# 4
+# 2
 res.voomG <- res
 
 
