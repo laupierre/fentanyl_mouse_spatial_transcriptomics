@@ -60,7 +60,7 @@ head (res)
 
 table (res$padj < 0.05)
 #FALSE  TRUE 
-#15327    40 
+#13407    46 
 
 boxplot (res$log.fold.change)
 abline (h=0)
@@ -78,7 +78,7 @@ idx <- match (res$gene_name, names (res1a))
 res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$padj), ]
 
-write.xlsx (res, "table 7. hippocampus_G3vsG1_selected_cells_sct_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+write.xlsx (res, "table 8. hippocampus_G3vsG1_selected_cells_sct_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
 
 
 
