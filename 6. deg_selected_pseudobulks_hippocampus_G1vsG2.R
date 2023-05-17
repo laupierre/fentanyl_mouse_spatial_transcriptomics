@@ -9,19 +9,17 @@ library (sctransform)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
-brain <- SCTransform(brain, vst.flavor = "v2") 
-
-
 ## Here we are normalizing the hippocampus cells only with lognorm (and not the entire brain)
 
 # raw counts
-# counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
-#dim (counts)
+counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+dim (counts)
 # 32264   229
 
 # take the corrected counts
-counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
-dim (counts)
+# brain <- SCTransform(brain, vst.flavor = "v2") 
+# counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+# dim (counts)
 # 18827   229
 
 boxplot (apply (counts, 1, mean))
