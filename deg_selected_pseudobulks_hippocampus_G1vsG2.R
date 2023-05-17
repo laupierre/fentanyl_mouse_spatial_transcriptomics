@@ -8,12 +8,17 @@ library (openxlsx)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
-## Here we are normalizing the hippocampus cells only (and not the entire nrain)
+## Here we are normalizing the hippocampus cells only with lognorm (and not the entire brain)
 
 # raw counts
-counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
-dim (counts)
+# counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+#dim (counts)
 # 32264   229
+
+# raw counts
+counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+dim (counts)
+# 18827   229
 
 boxplot (apply (counts, 1, mean))
 counts <- counts[apply (counts, 1, mean) > 0.5, ]
@@ -84,7 +89,9 @@ write.xlsx (res, "pseudobulk_hippocampus_selected_cells.xlsx", rowNames=F)
 
 
 
-## No main differences when compared to the alternative methods 
+
+##### No main differences when compared to the alternative methods 
+
 ## voomQW with sample variability
 y <- voomWithQualityWeights(d0, design = mm, plot = TRUE)
 fit <- lmFit(y, mm)
