@@ -15,7 +15,7 @@ sc <- read.xlsx ("table 1. hippocampus_G2vsG1_selected_cells_normalization_wilco
 sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
 
 
-pdf ("Comparison between bulk, pseudobulk and spatial RNA-Seq version 2.pdf")
+pdf ("figure 10. Comparison between bulk, pseudobulk and spatial RNA-Seq.pdf")
 par (mfrow= c(3,1))
 comp1 <- merge (sc, pseudo, by="gene_name")
 plot (comp1$avg_logFC, comp1$logFC, xlab="logFC wilcoxon (lognorm selected cells)", ylab="logFC limma (pseudobulk)", main="Comparison spatial vs pseudobulk transcriptomics",
