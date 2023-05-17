@@ -19,7 +19,7 @@ brain <- SCTransform(brain, vst.flavor = "v2")
 #dim (counts)
 # 32264   229
 
-# corrected counts
+# take the corrected counts
 counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
 # 18827   229
@@ -83,6 +83,7 @@ tmp <- contrasts.fit(fit, contr)
 tmp <- eBayes(tmp)
 res <- topTable(tmp, sort.by = "p", n = Inf) 
 res <- res[res$adj.P.Val <= 0.05, ]
+res$gene_name <- row.names (res)
 
 table (res$adj.P.Val < 0.05)
 # 44
