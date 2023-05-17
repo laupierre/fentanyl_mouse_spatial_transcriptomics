@@ -82,41 +82,6 @@ write.xlsx (res, "table 9. hippocampus_G4vsG2_selected_cells_sct_brain_normaliza
 
 
 
-#########
-## Sanity check. comparison with bulk RNA-Seq and after SCT normalization on selected cells
-
-library (openxlsx)
-
-## bulk RNA-Seq
-bulk <- read.xlsx ("sham_vs_sni_Differential_Expression.xlsx")
-colnames (bulk)[2] <- "gene_name"
-
-pdf ("Comparison spatial SCT and RNA-Seq methods G4 vs G2.pdf")
-comp1 <- merge (res, bulk, by="gene_name") 
-plot (comp1$log.fold.change, comp1$Log2.Fold.Change, xlab="log fold changes wilcoxon (spatial SCT normalization)", ylab="log fold changes wald (bulk)", main="Comparison spatial SCT vs bulk transcriptomics",
-      xlim=c(-3,3), ylim=c(-3,3))
-abline (0,1, col="red")
-abline (h=0)
-abline (v=0)
-dev.off ()
-
-
-## single cell (after lognorm normalization on selected hippocampal cells)
-sc <- read.xlsx ("hippocampus_G4vsG2_selected_cells_wilcoxon_analysis.xlsx")
-# invert the log fold changes
-#sc$avg_logFC <- -1*sc$avg_logFC
-sc <- sc[ ,c("gene_name", "avg_logFC", "p_val_adj", "mean", "Description")]
-
-comp2 <- merge (res, sc, by="gene_name") 
-plot (comp2$log.fold.change, comp2$avg_logFC, xlab="log fold changes wilcoxon (SCT normalization)", ylab="log fold changes wilcoxon (lognorm normalization)", main="Comparison SCT vs lognorm normalizations",
-      xlim=c(-3,3), ylim=c(-3,3), col=ifelse (comp2$padj < 0.05, "blue","black"))
-abline (0,1, col="red")
-abline (h=0)
-abline (v=0)
-
-
-
-
 
 
 
