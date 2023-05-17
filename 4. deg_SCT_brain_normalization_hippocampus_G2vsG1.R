@@ -5,12 +5,16 @@
 ### If you do not expect huge slide to slide variation in terms of technical noise, you would get very similar results if you run SCTransform after merging. 
 ### The idea behind splitting and then running SCTransform is to enable it to learn a dataset-specific model of technical noise (which could be very similar across samples in most cases)
 
+### See the SCTtransform version 2, https://satijalab.org/seurat/articles/sctransform_v2_vignette.html
+
 
 library (Seurat)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
-
+brain <- SCTransform(brain, vst.flavor = "v2") 
+ 
+ 
 ####### SCT normalized data
 ## extract the SCT hippocampus normalized data directly
 counts <- as.matrix (brain[["SCT"]]$data [ ,WhichCells(brain, expression = location == "Hippocampus")])
