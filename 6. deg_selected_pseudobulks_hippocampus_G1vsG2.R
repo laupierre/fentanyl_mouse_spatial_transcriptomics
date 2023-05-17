@@ -13,7 +13,7 @@ brain <- readRDS ("brain_G2G1_groups.rds")
 
 counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
-# 32264   229
+# 18827   229
 
 # take the corrected counts (v2)
 # brain <- SCTransform(brain, vst.flavor = "v2") 
