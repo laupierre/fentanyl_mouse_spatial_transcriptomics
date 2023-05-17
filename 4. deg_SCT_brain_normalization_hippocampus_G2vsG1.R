@@ -7,7 +7,9 @@
 
 ### See the SCTtransform version 2, https://satijalab.org/seurat/articles/sctransform_v2_vignette.html
 
+# install.packages("sctransform", dependencies=TRUE)
 
+library (sctransform)
 library (Seurat)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
@@ -68,15 +70,18 @@ head (res)
 
 table (res$padj < 0.05)
 #FALSE  TRUE 
-#12069  2732  
+#12576   452   
 
 boxplot (res$log.fold.change)
 abline (h=0)
 
+write.xlsx (res, "table 7. hippocampus_G2vsG1_selected_cells_sct_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+
+
 
 
 #########
-## Sanity check. comparison with bulk RNA-Seq and after SCT normalization on selected cells
+## Sanity check. comparison with bulk RNA-Seq and after SCT brain normalization
 
 library (openxlsx)
 
