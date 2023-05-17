@@ -59,7 +59,7 @@ head (res)
 
 table (res$padj < 0.05)
 #FALSE  TRUE 
-#14285    26  
+#13967    23   
 
 boxplot (res$log.fold.change)
 abline (h=0)
