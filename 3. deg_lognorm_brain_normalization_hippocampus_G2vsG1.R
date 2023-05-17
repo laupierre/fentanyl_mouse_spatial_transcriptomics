@@ -1,5 +1,5 @@
 ## See the scuttle library: https://bioconductor.org/packages/devel/bioc/vignettes/scuttle/inst/doc/norm.html
-## This method keeps the symmetry in comparison to the SCT normalization
+## This method keeps the symmetry in comparison to the SCT normalization (see step 4)
 
 library (Seurat)
 library (scuttle)
