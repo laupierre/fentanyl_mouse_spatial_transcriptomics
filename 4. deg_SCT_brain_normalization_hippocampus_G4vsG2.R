@@ -1,6 +1,10 @@
+library (sctransform)
 library (Seurat)
+library (openxlsx)
 
 brain <- readRDS ("brain_slide2_G2G4_groups.rds")
+
+brain <- SCTransform(brain, vst.flavor = "v2")
 
 
 ####### SCT normalized data
@@ -59,6 +63,22 @@ table (res$padj < 0.05)
 
 boxplot (res$log.fold.change)
 abline (h=0)
+
+
+## Gene annotation
+
+library('org.Mm.eg.db')
+
+#columns(org.Mm.eg.db)
+symbols <- res$gene_name
+res1a <- mapIds(org.Mm.eg.db, symbols, 'GENENAME', 'SYMBOL')
+
+idx <- match (res$gene_name, names (res1a))
+res$Description <- as.vector (res1a) [idx]
+res <- res[order (res$padj), ]
+
+write.xlsx (res, "table 9. hippocampus_G4vsG2_selected_cells_sct_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+
 
 
 
