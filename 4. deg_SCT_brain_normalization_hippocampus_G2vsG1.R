@@ -1,5 +1,10 @@
 ### SCT is not working well because there are many significant genes that are not symmetrical 
-### This may be due to the batch in the experimental design
+### See info: https://github.com/satijalab/seurat/issues/5009#issuecomment-907426252
+### If your library sizes are comparable across the different slides, you can compare the data slots of SCT assay. 
+### If the median sequencing depths are similar, the data slot of SCT assay is comparable.
+### If you do not expect huge slide to slide variation in terms of technical noise, you would get very similar results if you run SCTransform after merging. 
+### The idea behind splitting and then running SCTransform is to enable it to learn a dataset-specific model of technical noise (which could be very similar across samples in most cases)
+
 
 library (Seurat)
 
