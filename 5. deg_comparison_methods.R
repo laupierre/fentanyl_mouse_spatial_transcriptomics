@@ -146,7 +146,7 @@ rnaseq <- rnaseq[ ,c("Gene.Symbol", "Log2.Fold.Change", "FDR.Adj.p.Value", "Mean
 comp2 <- merge (sct, rnaseq, by.x="gene_name", by.y="Gene.Symbol")
 
 pdf ("figure 9. Comparison SCT normalization and Bulk RNA-Seq G2 vs G1.pdf")
-plot (comp2$log.fold.change, comp2$Log2.Fold.Change, xlab="logFC wilcoxon (lognorm on selected cells)", ylab="logFC (Bulk RNA-Seq)", main="Comparison SCT entire brain and bulk RNA-Seq methods",
+plot (comp2$log.fold.change, comp2$Log2.Fold.Change, xlab="logFC wilcoxon (SCT entire brain)", ylab="logFC (Bulk RNA-Seq)", main="Comparison SCT entire brain and bulk RNA-Seq methods",
       xlim=c(-2,2), ylim=c(-2,2), col=ifelse (comp2$padj < 0.05 | comp2$FDR.Adj.p.Value < 0.05, "blue","black"))
 abline (0,1, col="red")
 abline (h=0)
