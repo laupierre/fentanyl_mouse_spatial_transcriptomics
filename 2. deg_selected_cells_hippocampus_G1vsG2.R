@@ -76,15 +76,12 @@ saveRDS (brain, "brain_G2G1_groups.rds")
 ## Wilcoxon test
 ## Here we are normalizing on the selected cells only after extracting the raw counts from these cells
 
-# devtools::install_github("neurorestore/Libra")
-library (Libra)
-
 # str (brain@assays)
 # raw counts
 # counts <- data.matrix (brain[["Spatial"]]$counts)
 # max (as.data.frame (counts [ ,1]))
 
-# normalized counts
+# normalized counts (log2)
 # counts <- as.matrix (brain@assays$SCT@data) 
 # max (as.data.frame (counts [ ,1]))
 
@@ -92,6 +89,8 @@ library (Libra)
 # counts <- as.matrix (brain@assays$SCT@scale.data) 
 # max (as.data.frame (counts [ ,1]))
 
+# devtools::install_github("neurorestore/Libra")
+library (Libra)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
@@ -151,13 +150,14 @@ res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$p_val_adj), ]
 res <- res[ ,-which (colnames (res) == "de_family")]
 
-write.xlsx (res, "hippocampus_G2vsG1_selected_cells_wilcoxon_analysis.xlsx", rowNames=F)
+write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
 
 boxplot (res$avg_logFC)
 abline (h=0)
 
 
-#########
+
+######### Comparison with lognorm brain normalization
 
 brain.n <- read.xlsx ("hippocampus_G2vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx")
 
