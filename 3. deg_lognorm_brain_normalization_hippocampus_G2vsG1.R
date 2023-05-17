@@ -149,7 +149,7 @@ idx <- match (res$gene_name, names (res1a))
 res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$padj), ]
 
-write.xlsx (res, "hippocampus_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+write.xlsx (res, "table 4. hippocampus_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
 
 
 
