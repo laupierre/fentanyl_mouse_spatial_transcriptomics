@@ -5,8 +5,12 @@ library (Seurat)
 library (edgeR)
 library (limma)
 library (openxlsx)
+library (sctransform)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
+
+brain <- SCTransform(brain, vst.flavor = "v2") 
+
 
 ## Here we are normalizing the hippocampus cells only with lognorm (and not the entire brain)
 
