@@ -1,9 +1,11 @@
 library (Seurat)
 library (ggpubr)
-
+library (sctransform)
 
 ### Slide 1
 brain <- readRDS ("brain_slide1_G1G3_groups.rds")
+
+brain <- SCTransform(brain, vst.flavor = "v2") 
 
 Images (brain)
 # G1-1A, G3-1B, G1-1C, G3-1D
@@ -20,6 +22,9 @@ ggsave ("slide1.pdf")
 
 ### Slide 2
 brain2 <- readRDS ("brain_slide2_G2G4_groups.rds")
+
+brain2 <- SCTransform(brain2, vst.flavor = "v2") 
+
 
 Images (brain2)
 # G2-2A, G4-2B, G2-2C, G4-2D
