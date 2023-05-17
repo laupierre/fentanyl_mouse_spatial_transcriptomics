@@ -22,7 +22,7 @@ brain <- brain[!grepl("^mt-", rownames(brain)), ]
 brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 
 # normalization
-brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+#brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
 colnames (meta)[2] <- "TOTAL"
