@@ -11,12 +11,11 @@ brain <- readRDS ("brain_G2G1_groups.rds")
 
 ## Here we are normalizing the hippocampus cells only with lognorm (and not the entire brain)
 
-# raw counts
-counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 dim (counts)
 # 32264   229
 
-# take the corrected counts
+# take the corrected counts (v2)
 # brain <- SCTransform(brain, vst.flavor = "v2") 
 # counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
 # dim (counts)
