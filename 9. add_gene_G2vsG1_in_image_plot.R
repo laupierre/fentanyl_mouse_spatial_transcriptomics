@@ -36,7 +36,7 @@ return (pall1)
 }
 
 
-gene <- "Kcnab1"
+gene <- "Plppr4"
 pall3 <- add_image (gene)
 pall3
 
