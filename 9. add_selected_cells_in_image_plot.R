@@ -8,6 +8,7 @@ brain <- readRDS ("brain_slide1_G1G3_groups.rds")
 ### Slide 2
 brain2 <- readRDS ("brain_slide2_G2G4_groups.rds")
 
+
 colors <- c(Hippocampus = brewer.pal(3, "Dark2")[2], unknown = "grey")
 
 p1 <- SpatialDimPlot(brain, cols= colors, group.by="location", images = "slice1") + ggplot2::theme(legend.position = "none")
