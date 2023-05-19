@@ -32,8 +32,8 @@ pa1 <- ggarrange (p1 | p2, nrow=1, labels="G2")
 pa2 <- ggarrange (p3 | p4, nrow=1, labels="G4")
 pall2 <- ggarrange (pa1, pa2, nrow=2)
 
-ggsave ("selected cells highlight 1 plot.pdf", sep=""), pall1, width=8, height=8)
-ggsave ("selected cells highlight 2 plot.pdf", sep=""), pall2, width=8, height=8)
+ggsave ("selected cells highlight 1 plot.pdf", pall1, width=8, height=8)
+ggsave ("selected cells highlight 2 plot.pdf", pall2, width=8, height=8)
 
 
 
@@ -48,7 +48,7 @@ p4 <- SpatialDimPlot(brain2, cols= colors, group.by="location", images = "slice1
 pa2 <- ggarrange (p3 | p4, nrow=1, labels="G2")
 
 pall3 <- ggarrange (pa2, pa1, nrow=2)
-ggsave ("selected cells highlight plot.pdf", sep=""), pall3, width=8, height=8)
+ggsave ("selected cells highlight plot.pdf", pall3, width=8, height=8)
 
 
 
