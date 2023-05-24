@@ -123,6 +123,10 @@ res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$p_val_adj), ]
 res <- res[ ,-which (colnames (res) == "de_family")]
 
+table (res$p_val_adj < 0.05)
+#FALSE  TRUE 
+# 8510    36 
+
 write.xlsx (res, "table 3. hippocampus_G4vsG2_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
 
 
