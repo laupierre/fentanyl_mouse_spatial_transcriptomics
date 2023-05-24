@@ -14,6 +14,12 @@ dim (counts)
 # 11907   211
 
 
+## FIXME
+# Dropout analysis
+
+
+
+
 # for backward compatibility
 counts <- as (counts, "sparseMatrix")
 seurat.ss2 <- CreateSeuratObject(counts)
