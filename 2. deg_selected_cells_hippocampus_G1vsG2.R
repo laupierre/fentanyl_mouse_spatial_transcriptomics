@@ -37,6 +37,12 @@ counts <- counts[apply (counts, 1, mean) > 0.05, ]
 dim (counts)
 # 12381   229
 
+
+## FIXME
+# Dropout analysis
+
+
+
 # for backward compatibility
 counts <- as (counts, "sparseMatrix")
 seurat.ss2 <- CreateSeuratObject(counts)
