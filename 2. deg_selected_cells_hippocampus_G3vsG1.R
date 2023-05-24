@@ -69,7 +69,7 @@ prop <- prop[prop$drop == TRUE, ]
 
 counts <- counts[row.names (counts) %in% row.names (prop), ]
 dim (counts)
-# 9630  252
+# 9384  252
 
 #### End of optional: Dropout removal
 
