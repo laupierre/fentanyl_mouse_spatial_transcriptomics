@@ -152,6 +152,10 @@ res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$p_val_adj), ]
 res <- res[ ,-which (colnames (res) == "de_family")]
 
+table (res$p_val_adj < 0.05)
+#FALSE  TRUE 
+# 9095   104 
+
 write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
 
 boxplot (res$avg_logFC)
