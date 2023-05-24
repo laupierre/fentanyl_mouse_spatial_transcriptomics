@@ -41,6 +41,63 @@ dim (counts)
 
 #### Optional: Dropout analysis
 
+## Step1 (numa)
+
+meta <- brain@meta.data
+meta.g1 <- meta[grep ("G1-1A", meta$group), ]
+meta.g1 <- meta.g1 [row.names (meta.g1) %in% colnames (counts), ]
+table (meta.g1$group)
+
+meta.g2 <- meta[grep ("G2-2A", meta$group), ]
+meta.g2 <- meta.g2 [row.names (meta.g2) %in% colnames (counts), ]
+table (meta.g2$group)
+
+meta.g3 <- meta[grep ("G1-1C", meta$group), ]
+meta.g3 <- meta.g3 [row.names (meta.g3) %in% colnames (counts), ]
+table (meta.g3$group)
+
+meta.g4 <- meta[grep ("G2-2C", meta$group), ]
+meta.g4 <- meta.g4 [row.names (meta.g4) %in% colnames (counts), ]
+table (meta.g4$group)
+
+
+counts.g1 <- counts[ ,colnames (counts) %in% row.names (meta.g1)]
+dim (counts.g1)
+counts.g2 <- counts[ ,colnames (counts) %in% row.names (meta.g2)]
+dim (counts.g2)
+counts.g3 <- counts[ ,colnames (counts) %in% row.names (meta.g3)]
+dim (counts.g3)
+counts.g4 <- counts[ ,colnames (counts) %in% row.names (meta.g4)]
+dim (counts.g4)
+
+# Percentage of cells expressing a gene
+prop1 <- data.frame (G1_1A= apply (counts.g1, 1, function (x) {sum (x == 0)}))
+prop2 <- data.frame (G2_2A= apply (counts.g2, 1, function (x) {sum (x == 0)}))
+prop3 <- data.frame (G1_1C= apply (counts.g3, 1, function (x) {sum (x == 0)}))
+prop4 <- data.frame (G2_2C= apply (counts.g4, 1, function (x) {sum (x == 0)}))
+prop1  <- table (meta.g1$group)[[1]] - prop1
+prop2  <- table (meta.g2$group)[[1]] - prop2
+prop3  <- table (meta.g3$group)[[1]] - prop3
+prop4  <- table (meta.g4$group)[[1]] - prop4
+numa <- cbind (prop1, prop2, prop3, prop4)
+
+prop <- cbind ( data.frame (G1= prop1+prop3), data.frame (G2= prop2+prop4))
+colnames (prop) <- c("G1","G2")
+
+numa <- cbind (numa, prop)
+
+
+prop2 <- data.frame (G1_prop= prop$G1 / (dim (counts.g1) [2] + dim (counts.g3) [2]))
+prop3 <- data.frame (G2_prop= prop$G2 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
+prop <- round (cbind (prop2 *100, prop3*100), digits=1)
+
+numa <- cbind (numa, prop)
+head (numa)
+
+
+
+
+## Step2 
 meta <- brain@meta.data
 meta.g1 <- meta[grep ("G1", meta$group), ]
 meta.g1 <- meta.g1 [row.names (meta.g1) %in% colnames (counts), ]
@@ -119,7 +176,7 @@ table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
 # G1  G2 
 #120 109 
 
-mymean <- data.frame (mean= apply (counts, 1, mean))
+mymean <- data.frame (mean_counts= apply (counts, 1, mean))
 
 
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
@@ -137,6 +194,12 @@ res <- merge (res,prop, by="row.names")
 res <- res[ ,-1]
 res <- res[ ,-dim (res)[2]]
 row.names (res) <- res$gene_name 
+
+## Add numa info
+res <- merge (res, numa, by="row.names")
+res <- res[ ,-1]
+row.names (res) <- res$gene_name 
+
 
 
 ## Annotation
@@ -156,7 +219,9 @@ table (res$p_val_adj < 0.05)
 #FALSE  TRUE 
 # 9095   104 
 
-write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+#write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", rowNames=F)
+
 
 boxplot (res$avg_logFC)
 abline (h=0)
