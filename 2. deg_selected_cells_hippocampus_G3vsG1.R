@@ -2,6 +2,7 @@ library (Libra)
 library (Seurat)
 library (openxlsx)
 
+
 brain <- readRDS ("brain_slide1_G1G3_groups.rds")
 
 # raw counts
@@ -26,15 +27,13 @@ meta.g2 <- meta[grep ("G3", meta$group), ]
 meta.g2 <- meta.g2 [row.names (meta.g2) %in% colnames (counts), ]
 table (meta.g2$group)
 
-
 counts.g1 <- counts[ ,colnames (counts) %in% row.names (meta.g1)]
 dim (counts.g1)
-# 12691   120
 counts.g2 <- counts[ ,colnames (counts) %in% row.names (meta.g2)]
 dim (counts.g2)
-# 12691   132
 
-# Percentage of cells with zeros for each gene
+
+# Percentage of cells with zeros (for each gene)
 prop1 <- data.frame (prop1= apply (counts.g1, 1, function (x) {sum (x == 0)}))
 prop2 <- data.frame (prop2= apply (counts.g2, 1, function (x) {sum (x == 0)}))
 prop <- cbind (prop1/dim (counts.g1)[2] *100, prop2/dim (counts.g2)[2] *100)
@@ -61,13 +60,16 @@ p3
 #ggsave ("figure 11. Percentage of dropouts in G1G3 groups.pdf", p3, width=8, height=8)
 
 
-# select genes with up to 75% dropouts
-prop$drop <- apply (prop, 1, function (x) {any (x > 75)})
-prop <- prop[prop$drop == FALSE, ]
+# Proportion of cells expressing a gene
+prop <- 100- prop
+
+# select genes with at least 25% of cells expressing the gene in any group
+prop$drop <- apply (prop, 1, function (x) {any (x > 25)})
+prop <- prop[prop$drop == TRUE, ]
 
 counts <- counts[row.names (counts) %in% row.names (prop), ]
 dim (counts)
-# 8865  252
+# 9630  252
 
 #### End of optional: Dropout removal
 
@@ -89,7 +91,7 @@ meta.ss2 <- meta.ss2[idx, ]
 stopifnot (row.names (meta.ss2) == colnames (counts))
 
 seurat.ss2@meta.data <- meta.ss2
-table (seurat.ss2@meta.data$label)   # It will compare G1 vs G3
+table (seurat.ss2@meta.data$label)   # run_de will compare G1 vs G3
 # G1  G3 
 #120 132 
 
@@ -105,6 +107,11 @@ row.names (res) <- res$gene
 colnames (res)[1] <- "gene_name"
 res$avg_logFC <- -1 * res$avg_logFC
 
+## Add the cell proportion
+res <- merge (res,prop, by="row.names")
+res <- res[ ,-1]
+res <- res[ ,-dim (res)[2]]
+row.names (res) <- res$gene_name 
 
 ## Annotation
 
