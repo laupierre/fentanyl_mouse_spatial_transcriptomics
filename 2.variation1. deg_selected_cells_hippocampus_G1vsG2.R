@@ -78,7 +78,25 @@ head (numa)
 
 # Compute two-proportions z-test
 # Fisher Exact probability test is an excellent non-parametric technique for comparing proportions, when the two independent samples are small in size.
+# We want to know, whether the proportions of positive spots are the same in the two groups (G1 and G2)
 # See http://www.sthda.com/english/wiki/two-proportions-z-test-in-r
+
+resl <- list ()
+
+for (i in (1:dim (numa)[1])) {
+x <- c (numa[i, 1] + numa[i ,2], numa[i, 3] + numa[i, 4])
+n <- c (table (meta.g1$group)[[1]] + table (meta.g3$group)[[1]] , table (meta.g2$group)[[1]] + table (meta.g4$group)[[1]] )
+
+res <- prop.test(x = x, n = n)
+res <- cbind (t (data.frame (res$estimate)) *100, data.frame (pvalz= res$p.value))
+row.names (res) <- row.names (numa)[i]
+resl[[i]] <- res
+}
+
+resl <- do.call ("rbind", resl)
+resl$pvalz_adj <- p.adjust (resl$pvalz, method= "BH")
+head (resl)
+
 
 
 
