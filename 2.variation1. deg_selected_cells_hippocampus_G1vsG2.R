@@ -179,8 +179,25 @@ write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilco
 
 
 
+### 3D scatterplot 
+# See https://plotly.com/r/3d-scatter-plots/
+# We plot avg_logFC, p-value(mean copy count), avr_logFC(percentage)
 
+library(plotly)
+library (processx)
 
+res$direction <- ifelse (res$avg_logFC < 0, "negative", "positive")
+res$direction <- as.factor (res$direction)
+table(res$direction)
+
+fig <- plot_ly(res, x = ~avg_logFC, y = ~p_val, z = ~change.pct, color = ~direction, colors = c('#BF382A', '#0C4B8E'))
+fig <- fig %>% add_markers()
+fig <- fig %>% layout(scene = list(xaxis = list(title = 'Avg logFC'),
+                     yaxis = list(title = 'pval'),
+                     zaxis = list(title = 'Change in percentage of expressing cells')))
+
+fig
+orca(fig, "figure 14. 3D scatter plot.pdf")
 
 
 
