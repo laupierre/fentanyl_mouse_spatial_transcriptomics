@@ -186,10 +186,6 @@ write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilco
 library(plotly)
 library (processx)
 
-#res$pval.volc <- -log10(res$p_val)
-#res$direction <- ifelse (res$avg_logFC < 0, "negative", "positive")
-#res$direction <- as.factor (res$direction)
-#table(res$direction)
 
 p <- ggplot(data=res, aes(x=avg_logFC, y=-log10(p_val))) + 
       geom_point(aes(color=ifelse (p_val < 0.005, 'red', 'black'))) + theme_minimal() + theme(legend.position = "none")
@@ -197,7 +193,9 @@ p
 ggsave ("figure 14. 2D volcano plot.pdf")
 
 
-res$pval.volc <- -log10(res$p_val)
+res$pval.volc <- round (-log10(res$p_val), digits =3)
+res$avg_logFC <- round (res$avg_logFC, digits=3)
+res$change.pct <- round (res$change.pct, digits=3)
 
 res$direction <- ifelse (res$p_val < 0.005, "significant", "non_significant")
 res$direction[res$direction == "significant" & res$avg_logFC < 0] <- "negative"
@@ -216,9 +214,16 @@ fig
 reticulate::py_run_string("import sys")
 save_image (fig, file="figure 15. 3D scatter plot.pdf")
 
+res$xaxis <- res$avg_logFC
+res$yaxis <- res$pval.volc
+res$zaxis <- res$change.pct
 
-       
-       
+write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells_tested.xlsx", rowNames=F)
+
+## sanity check
+res[res$direction == "positive" & res$zaxis == 0 & res$yaxis > 12.92, ]
+# Ndufa4
+res[res$direction == "negative" & res$zaxis < -0.91 & res$xaxis == --0.4226544, ]
 
 
 
