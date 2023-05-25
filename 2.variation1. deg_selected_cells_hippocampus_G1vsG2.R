@@ -211,19 +211,26 @@ fig <- fig %>% layout(scene = list(xaxis = list(title = 'Avg logFC'),
                      zaxis = list(title = 'Change in percentage of expressing cells')))
 
 fig
-reticulate::py_run_string("import sys")
-save_image (fig, file="figure 15. 3D scatter plot.pdf")
+#reticulate::py_run_string("import sys")
+#save_image (fig, file="figure 15. 3D scatter plot.pdf")
 
-res$xaxis <- res$avg_logFC
-res$yaxis <- res$pval.volc
-res$zaxis <- res$change.pct
+res$xaxis <- round (res$avg_logFC, digits=3)
+res$yaxis <- round (res$pval.volc, digits=3)
+res$zaxis <- round (res$change.pct, digits=3)
 
-write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells_tested.xlsx", rowNames=F)
+#write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells_tested.xlsx", rowNames=F)
 
 ## sanity check
-res[res$direction == "positive" & res$zaxis == 0 & res$yaxis > 12.92, ]
+res[res$direction == "positive" & res$zaxis == 0 & res$yaxis >= 12.92, ]
 # Ndufa4
-res[res$direction == "negative" & res$zaxis < -0.91 & res$xaxis == --0.4226544, ]
+res[res$direction == "negative" & res$yaxis == 8.41, ]
+# Hspa5
+res[res$direction == "positive" & res$yaxis == 7.26, ]
+#Nfkb2
+res[res$direction == "negative" & res$yaxis == 4.506, ]
+#Lzts3
+
+
 
 
 
