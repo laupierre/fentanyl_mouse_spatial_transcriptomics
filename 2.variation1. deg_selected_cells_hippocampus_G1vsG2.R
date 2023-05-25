@@ -138,8 +138,8 @@ table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
 # G1  G2 
 #120 109 
 
-# FIXME
-#mymean <- data.frame (mean_counts= apply (counts, 1, mean))
+# FIXME. Recalculate this
+mymean <- data.frame (mean_counts= apply (counts, 1, mean))
 
 
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
