@@ -138,7 +138,7 @@ table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
 # G1  G2 
 #120 109 
 
-# FIXME. Recalculate this
+# FIXME. Correct this !!!
 mymean <- data.frame (mean_counts= apply (counts, 1, mean))
 
 
@@ -186,20 +186,39 @@ write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilco
 library(plotly)
 library (processx)
 
-res$direction <- ifelse (res$avg_logFC < 0, "negative", "positive")
+#res$pval.volc <- -log10(res$p_val)
+#res$direction <- ifelse (res$avg_logFC < 0, "negative", "positive")
+#res$direction <- as.factor (res$direction)
+#table(res$direction)
+
+p <- ggplot(data=res, aes(x=avg_logFC, y=-log10(p_val))) + 
+      geom_point(aes(color=ifelse (p_val < 0.005, 'red', 'black'))) + theme_minimal() + theme(legend.position = "none")
+p
+ggsave ("figure 14. 2D volcano plot.pdf")
+
+
+res$pval.volc <- -log10(res$p_val)
+
+res$direction <- ifelse (res$p_val < 0.005, "significant", "non_significant")
+res$direction[res$direction == "significant" & res$avg_logFC < 0] <- "negative"
+res$direction[res$direction == "significant"] <- "positive"
 res$direction <- as.factor (res$direction)
 table(res$direction)
 
-fig <- plot_ly(res, x = ~avg_logFC, y = ~p_val, z = ~change.pct, color = ~direction, colors = c('#BF382A', '#0C4B8E'))
+
+fig <- plot_ly(res, x = ~avg_logFC, y = ~pval.volc, z = ~change.pct, color = ~direction, colors = c('#BF382A', '#000000', '#0C4B8E'))
 fig <- fig %>% add_markers()
 fig <- fig %>% layout(scene = list(xaxis = list(title = 'Avg logFC'),
-                     yaxis = list(title = 'pval'),
+                     yaxis = list(title = '-log10 (pval)'),
                      zaxis = list(title = 'Change in percentage of expressing cells')))
 
 fig
-orca(fig, "figure 14. 3D scatter plot.pdf")
+reticulate::py_run_string("import sys")
+save_image (fig, file="figure 15. 3D scatter plot.pdf")
 
 
+       
+       
 
 
 
