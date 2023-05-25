@@ -90,7 +90,6 @@ table (seurat.ss2@meta.data$label)   # run_de will compare G2 vs G4
 # G2  G4 
 #109 102 
 
-mymean <- data.frame (mean= apply (counts, 1, mean))
 
 
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
