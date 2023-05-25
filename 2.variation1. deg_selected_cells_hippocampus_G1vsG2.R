@@ -117,6 +117,65 @@ dim (counts)
 
 
 
+# for backward compatibility
+counts <- as (counts, "sparseMatrix")
+seurat.ss2 <- CreateSeuratObject(counts)
+
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+# we need cell_type (eg hippocampus), replicate (eg mouse), and label (eg treatment)
+meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
+meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
+meta.ss2$cell_type <- "Hippocampus"
+
+meta.ss2 <- meta.ss2[row.names (meta.ss2) %in% colnames (counts), ]
+idx <- match (row.names (meta.ss2), colnames (counts))
+meta.ss2 <- meta.ss2[idx, ]
+stopifnot (row.names (meta.ss2) == colnames (counts))
+
+seurat.ss2@meta.data <- meta.ss2
+table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
+# G1  G2 
+#120 109 
+
+mymean <- data.frame (mean_counts= apply (counts, 1, mean))
+
+
+res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
+res <- data.frame (res)
+row.names (res) <- res$gene
+res <- merge (res, mymean, by="row.names")
+res <- res[order (res$p_val_adj), ]
+row.names (res) <- res$gene
+colnames (res)[1] <- "gene_name"
+res$avg_logFC <- -1 * res$avg_logFC
+
+
+## Add numa info
+res <- merge (res, numa, by="row.names")
+res <- res[ ,-1]
+row.names (res) <- res$gene_name 
+
+
+## Annotation
+
+library('org.Mm.eg.db')
+
+#columns(org.Mm.eg.db)
+symbols <- row.names (res)
+res1a <- mapIds(org.Mm.eg.db, symbols, 'GENENAME', 'SYMBOL')
+
+idx <- match (row.names (res), names (res1a))
+res$Description <- as.vector (res1a) [idx]
+res <- res[order (res$p_val_adj), ]
+res <- res[ ,-which (colnames (res) == "de_family")]
+
+table (res$p_val_adj < 0.05)
+#FALSE  TRUE 
+# 9095   104 
+
+write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells_tested.xlsx", rowNames=F)
+
+
 
 
 
