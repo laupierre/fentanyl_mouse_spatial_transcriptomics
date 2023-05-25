@@ -21,6 +21,8 @@ dim (counts)
 # 12381   229
 
 
+
+
 #### Optional: Dropout analysis
 
 ## Step1 (numa)
@@ -96,6 +98,25 @@ resl[[i]] <- res
 resl <- do.call ("rbind", resl)
 resl$pvalz_adj <- p.adjust (resl$pvalz, method= "BH")
 head (resl)
+
+numa <- merge (numa, resl, by="row.names")
+row.names (numa) <- numa[ ,1]
+numa <- numa[ ,-1]
+
+# select genes with at least 25% of cells expressing the gene in any group
+prop <- numa[ ,c("prop 1", "prop 2")]
+row.names (prop) <- row.names (numa)
+prop$drop <- apply (prop, 1, function (x) {any (x > 25)})
+prop <- prop[prop$drop == TRUE, ]
+
+counts <- counts[row.names (counts) %in% row.names (prop), ]
+dim (counts)
+# 9199  229
+
+#### End of optional: Dropout removal
+
+
+
 
 
 
