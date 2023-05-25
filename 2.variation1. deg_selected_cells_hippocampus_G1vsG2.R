@@ -97,6 +97,7 @@ resl[[i]] <- res
 
 resl <- do.call ("rbind", resl)
 resl$pvalz_adj <- p.adjust (resl$pvalz, method= "BH")
+resl$change.pct <- resl$`prop 2` -  resl$`prop 1`
 head (resl)
 
 numa <- merge (numa, resl, by="row.names")
