@@ -37,6 +37,7 @@ dim (counts)
 cell_types <- read.csv(file.path(refdir,"cell_types.csv")) # load in cell types
 cell_types <- setNames(cell_types[[2]], cell_types[[1]])
 cell_types <- as.factor(cell_types) # convert to factor data type
+table (cell_types)
 
 nUMI <- read.csv(file.path(refdir,"nUMI.csv")) # load in cell types
 nUMI <- setNames(nUMI[[2]], nUMI[[1]])
