@@ -32,7 +32,7 @@ refdir <- system.file("extdata",'Reference/Visium_Ref',package = 'spacexr') # di
 counts <- read.csv(file.path(refdir,"counts.csv")) # load in cell types
 rownames(counts) <- counts[,1]; counts[,1] <- NULL # Move first column to rownames
 dim (counts)
-# 307 genes * 510 cell types
+# 307 significant genes * 510 cell types
 
 cell_types <- read.csv(file.path(refdir,"cell_types.csv")) # load in cell types
 cell_types <- setNames(cell_types[[2]], cell_types[[1]])
