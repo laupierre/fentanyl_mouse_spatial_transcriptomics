@@ -34,11 +34,16 @@ allen_reference <- readRDS("allen_cortex.rds")
 # check number of cells per subclass (there is no hippocampus there !!!)
 table(allen_reference$subclass)
 
-# select 200 cells max per subclass, first set subclass as active.ident
+# select 100 cells max per subclass, first set subclass as active.ident
 Idents(allen_reference) <- allen_reference$subclass
-allen_reference <- subset(allen_reference, cells = WhichCells(allen_reference, downsample = 200))
+allen_reference <- subset(allen_reference, cells = WhichCells(allen_reference, downsample = 100))
 
 # check again number of cells per subclass
+table(allen_reference$subclass)
+
+# remove cell types with count lower than 25 (CR neurons)
+torm <- WhichCells(allen_reference, ident = "CR")
+allen_reference <- allen_reference[ ,!colnames (allen_reference) %in% torm]
 table(allen_reference$subclass)
 
 # run SCT normalization and dimensionality reduction
@@ -63,9 +68,8 @@ markers_sc <- FindAllMarkers(allen_reference, only.pos = TRUE, logfc.threshold =
               test.use = "wilcox", min.pct = 0.05, min.diff.pct = 0.1, max.cells.per.ident = 200,
               return.thresh = 0.05, assay = "RNA")
 
-# Filter for genes that are also present in the ST data
+# Select genes that are also present in the ST data (in addition to the Allen SC data)
 markers_sc <- markers_sc[markers_sc$gene %in% rownames(visium@counts), ]
-
 
 # Select top 20 genes per cluster, select top by first p-value, then absolute diff in pct, then quota of pct.
 markers_sc$pct.diff <- markers_sc$pct.1 - markers_sc$pct.2
@@ -75,27 +79,27 @@ markers_sc %>%
     top_n(-100, p_val) %>%
     top_n(50, pct.diff) %>%
     top_n(20, log.pct.diff) -> top20
+
 m_feats <- unique(as.character(top20$gene))
 
+
+# Create raw counts
 allen_reference <- allen_reference[row.names (allen_reference) %in% m_feats, ]
 counts <- allen_reference[["RNA"]]@data
 dim (counts)
+# 384 1862
 
 # See https://www.10xgenomics.com/resources/analysis-guides/integrating-10x-visium-and-chromium-data-with-r
 # Create factors of cell types
-# need a minimum of 25 cells for each cell type in the reference
 
 cell_types_idx <- match (colnames (counts), names (allen_reference$subclass))
 cell_types <- allen_reference$subclass [cell_types_idx]
-table (cell_types)
 
-# Remove /
+# Remove / in names
 cell_types[cell_types == "L2/3 IT"] <- "L2_3 IT"
 
-# Group Sncg (Sncg+ GABAergic neuron) with Sst (Sst+ GABAergic neuron)
-cell_types[cell_types == "Sncg"] <- "Sncg_Sst"
-cell_types[cell_types == "Sst"] <- "Sncg_Sst"
-
+cell_types <- factor (cell_types)
+table (cell_types)
 
 
 # Create nUMI
@@ -109,13 +113,15 @@ reference <- Reference(counts, cell_types, nUMI)
 ## RCTD in multimode
 
 Sys.setenv("OPENBLAS_NUM_THREADS"=2)
-
 myRCTD <- create.RCTD(visium, reference, max_cores = 2)
 
 # full mode, which assigns any number of cell types per spot and is recommended for technologies with poor spatial resolution such as 100-micron resolution Visium; 
 # multi mode, an extension of doublet mode that can discover more than two cell types per spot as an alternative option to full mode
 
 myRCTD <- run.RCTD(myRCTD, doublet_mode = 'multi')
+saveRDS (myRCTD, "myRCTD_visium_allen_multi_mode.rds")
+
+
 
 
 
