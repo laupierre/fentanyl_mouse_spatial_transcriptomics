@@ -49,6 +49,35 @@ markers_sc %>%
 m_feats <- unique(as.character(top20$gene))
 
 
+# Create raw counts
+allen_reference <- allen_reference[row.names (allen_reference) %in% m_feats, ]
+counts <- allen_reference[["RNA"]]@data
+dim (counts)
+# 579 8152
+
+# See https://www.10xgenomics.com/resources/analysis-guides/integrating-10x-visium-and-chromium-data-with-r
+# Create factors of cell types
+cell_types_idx <- match (colnames (counts), names (allen_reference$subclass_label))
+cell_types <- allen_reference$subclass_label [cell_types_idx]
+
+# Remove / in names
+cell_types[cell_types == "L2/3 IT CTX"] <- "L2_3 IT"
+cell_types[cell_types == "L2/3 IT CTX"] <-
+cell_types[cell_types == "L2/3 IT CTX"] <-
+cell_types[cell_types == "L2/3 IT CTX"] <-
+
+
+cell_types <- factor (cell_types)
+table (cell_types)
+
+
+# Create nUMI
+nUMI <- allen_reference@meta.data$nCount_RNA
+nUMI <- nUMI[cell_types_idx]
+names (nUMI) <- colnames (counts)
+
+reference <- Reference(counts, cell_types, nUMI)
+
 
 
 
