@@ -27,6 +27,29 @@ Idents (allen_reference) <- "subclass_label"
 DimPlot(allen_reference, label = TRUE)
 
 
+allen_reference@active.assay = "RNA"
+
+# wilcoxon test between annotated clusters
+markers_sc <- FindAllMarkers(allen_reference, only.pos = TRUE, logfc.threshold = 0.1,
+              test.use = "wilcox", min.pct = 0.05, min.diff.pct = 0.1, max.cells.per.ident = 200,
+              return.thresh = 0.05, assay = "RNA")
+
+# Select genes that are also present in the ST data (in addition to the Allen SC data)
+markers_sc <- markers_sc[markers_sc$gene %in% rownames(visium@counts), ]
+
+# Select top 20 genes per cluster, select top by first p-value, then absolute diff in pct, then quota of pct.
+markers_sc$pct.diff <- markers_sc$pct.1 - markers_sc$pct.2
+markers_sc$log.pct.diff <- log2((markers_sc$pct.1 * 99 + 1)/(markers_sc$pct.2 * 99 + 1))
+markers_sc %>%
+    group_by(cluster) %>%
+    top_n(-100, p_val) %>%
+    top_n(50, pct.diff) %>%
+    top_n(20, log.pct.diff) -> top20
+
+m_feats <- unique(as.character(top20$gene))
+
+
+
 
 
 
