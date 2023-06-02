@@ -34,9 +34,9 @@ allen_reference <- readRDS("allen_cortex.rds")
 # check number of cells per subclass (there is no hippocampus there !!!)
 table(allen_reference$subclass)
 
-# select 100 cells max per subclass, first set subclass as active.ident
+# select 200 cells max per subclass, first set subclass as active.ident
 Idents(allen_reference) <- allen_reference$subclass
-allen_reference <- subset(allen_reference, cells = WhichCells(allen_reference, downsample = 100))
+allen_reference <- subset(allen_reference, cells = WhichCells(allen_reference, downsample = 200))
 
 # check again number of cells per subclass
 table(allen_reference$subclass)
