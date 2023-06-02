@@ -153,7 +153,7 @@ write.table (prop, "cell_proportions.txt", sep="\t", quote=F, row.names=TRUE, co
 weights <- list ()
 for (i in (1:length (myRCTD@results))) {
 x <- t (data.frame (myRCTD@results[[i]]$all_weights))
-row.names (x) <- colnames(visium@counts) [i]
+row.names (x) <- colnames(myRCTD@spatialRNA@counts) [i]
 weights [[i]] <-x
 }
 
