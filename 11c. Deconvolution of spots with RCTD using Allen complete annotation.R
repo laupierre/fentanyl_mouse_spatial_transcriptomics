@@ -62,10 +62,13 @@ cell_types <- allen_reference$subclass_label [cell_types_idx]
 
 # Remove / in names
 cell_types[cell_types == "L2/3 IT CTX"] <- "L2_3 IT"
-cell_types[cell_types == "L2/3 IT CTX"] <-
-cell_types[cell_types == "L2/3 IT CTX"] <-
-cell_types[cell_types == "L2/3 IT CTX"] <-
-
+cell_types[cell_types == "L2/3 IT ENTl"] <- "L2_3 IT ENTl"
+cell_types[cell_types == "L2/3 IT PPP"] <- "L2_3 IT PPP"
+cell_types[cell_types == "L2/3 IT RHP"] <- "L2_3 IT RHP"
+cell_types[cell_types == "L4/5 IT CTX"] <- "L4_5 IT CTX"
+cell_types[cell_types == "L5/6 IT TPE-ENT"] <- "L5_6 IT TPE-ENT"
+cell_types[cell_types == "L5/6 NP CTX"] <- "L5_6 NP CTX"
+cell_types[cell_types == "L6b/CT ENT"] <- "L6b_CT ENT"
 
 cell_types <- factor (cell_types)
 table (cell_types)
@@ -77,6 +80,22 @@ nUMI <- nUMI[cell_types_idx]
 names (nUMI) <- colnames (counts)
 
 reference <- Reference(counts, cell_types, nUMI)
+# Reference: some nUMI values are less than min_UMI = 100, and these cells will be removed
+
+
+## RCTD in multimode
+
+Sys.setenv("OPENBLAS_NUM_THREADS"=2)
+myRCTD <- create.RCTD(visium, reference, max_cores = 2)
+
+# full mode, which assigns any number of cell types per spot and is recommended for technologies with poor spatial resolution such as 100-micron resolution Visium; 
+# multi mode, an extension of doublet mode that can discover more than two cell types per spot as an alternative option to full mode
+
+myRCTD <- run.RCTD(myRCTD, doublet_mode = 'multi')
+saveRDS (myRCTD, "myRCTD_visium_allen_full_annot_multi_mode.rds")
+
+
+
 
 
 
