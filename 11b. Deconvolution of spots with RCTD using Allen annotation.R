@@ -167,7 +167,7 @@ cell_type_names <- colnames(norm_weights) # List of cell types
 # Save each plot as a jpg file
 for(i in 1:length(cell_type_names)){
    print (cell_type_names[i])
-   plot_puck_continuous(myRCTD@spatialRNA, barcodes, norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=1)
+   plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=3)
    # ggsave(paste(resultsdir, cell_type_names[i],'_weights.jpg', sep=''), height=5, width=5, units='in', dpi=300)
 }
 
