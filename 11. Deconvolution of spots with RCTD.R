@@ -15,7 +15,7 @@ visium <- read.VisiumSpatialRNA (dir)
 # Create a list of barcodes from the column names of the count matrix
 barcodes <- colnames(visium@counts)
 
-# Plot number of UMIs per barcode (spot)
+# Plot number of UMIs per barcode (spot). nUMI is the nCount_Spatial (initially present in the Seurat metadata)
 ## The number of UMIs (RNA species) is proportional to the number of cells 
 
 plot_puck_continuous(puck=visium, barcodes=barcodes, plot_val=visium@nUMI, 
