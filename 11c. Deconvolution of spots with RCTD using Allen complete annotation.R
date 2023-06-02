@@ -95,6 +95,74 @@ myRCTD <- run.RCTD(myRCTD, doublet_mode = 'multi')
 saveRDS (myRCTD, "myRCTD_visium_allen_full_annot_multi_mode.rds")
 
 
+# The results of RCTD multimode are stored in myRCTD@results
+# Each entry represents the estimated proportion of each cell type on each pixel.
+
+propl <- list ()
+
+for (i in (1:length (myRCTD@results))) {
+pixel <- myRCTD@results[[i]]
+prop <- t (data.frame (pixel$all_weights))
+ratio <- 1/sum (prop) 
+prop <- round (prop * ratio * 100)
+cell_types <- prop[ ,rev (order (prop)) ]
+
+cell_type1 <- paste (names (cell_types)[1] , cell_types [1], sep="=")
+cell_type2 <- paste (names (cell_types)[2] , cell_types [2], sep="=")
+cell_type3 <- paste (names (cell_types)[3] , cell_types [3], sep="=")
+prop <- data.frame (cell_type1, cell_type2, cell_type3)
+row.names (prop) <- barcodes[i]
+propl[[i]] <- prop
+}
+
+prop <- do.call ("rbind", propl)
+
+write.table (prop, "cell_proportions_allen.txt", sep="\t", quote=F, row.names=TRUE, col.names=NA)
+
+
+
+# Normalize per spot weights so cell type probabilities sum to 1 for each spot
+# the normalized weights can now be considered as probabilities
+
+weights <- list ()
+for (i in (1:length (myRCTD@results))) {
+x <- t (data.frame (myRCTD@results[[i]]$all_weights))
+row.names (x) <- colnames(myRCTD@spatialRNA@counts) [i]
+weights [[i]] <-x
+}
+
+weights <- do.call ("rbind", weights)
+norm_weights <- normalize_weights (weights)
+head (norm_weights)
+
+cell_type_names <- colnames(norm_weights) # List of cell types
+
+# Plot cell type probabilities (normalized) per spot (red = 1, blue = 0 probability)
+# Save each plot as a jpg file
+p <- list ()
+a <- 1
+
+#for(i in 1:length(cell_type_names)){
+for(i in c(2,3,4,8)){
+   print (cell_type_names[i])
+   p[[a]] <- plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=0.7)
+   # ggsave(paste(resultsdir, cell_type_names[i],'_weights.jpg', sep=''), height=5, width=5, units='in', dpi=300)
+   a <- a + 1
+}
+
+library (ggpubr)
+
+pa1 <- ggarrange (p[[1]] | p[[2]], nrow=1, labels="")
+pa2 <- ggarrange (p[[3]] | p[[4]], nrow=1, labels="")
+pall <- ggarrange (pa1, pa2, nrow=2)
+pall
+ggsave("cell_weights.jpg", height=8, width=8, units='in', dpi=300)
+
+
+
+
+
+
 
 
 
