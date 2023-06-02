@@ -149,6 +149,7 @@ write.table (prop, "cell_proportions.txt", sep="\t", quote=F, row.names=TRUE, co
 
 
 # Normalize per spot weights so cell type probabilities sum to 1 for each spot
+# the normalized weights can now be considered as probabilities
 
 weights <- list ()
 for (i in (1:length (myRCTD@results))) {
