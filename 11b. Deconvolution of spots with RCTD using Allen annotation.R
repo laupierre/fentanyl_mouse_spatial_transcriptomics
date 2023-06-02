@@ -19,7 +19,7 @@ plot_puck_continuous(puck=visium, barcodes=barcodes, plot_val=visium@nUMI,
            
            
 
-## get the Allen brain mouse cortex annotation
+## get the standard Allen brain mouse cortex annotation
 ## see https://nbisweden.github.io/workshop-scRNAseq/labs/compiled/seurat/seurat_07_spatial.html#Select_genes_for_deconvolution
 
 ## Keep in mind that it is important to have a reference that contains all the celltypes you expect to find in your spots. 
@@ -48,6 +48,84 @@ allen_reference <- SCTransform(allen_reference, ncells = 3000, verbose = FALSE, 
 
 # the annotation is stored in the 'subclass' column of object metadata
 DimPlot(allen_reference, label = TRUE)
+
+
+# Deconvolution is a method to estimate the abundance (or proportion) of different celltypes in a bulkRNAseq dataset using a single cell reference.
+# Most deconvolution methods does a prior gene selection and there are different options that are used:
+# Use variable genes in the SC data.
+# Use variable genes in both SC and ST data
+# DE genes between clusters in the SC data. (what we do below)
+
+allen_reference@active.assay = "RNA"
+
+# wilcoxon test between annotated clusters
+markers_sc <- FindAllMarkers(allen_reference, only.pos = TRUE, logfc.threshold = 0.1,
+              test.use = "wilcox", min.pct = 0.05, min.diff.pct = 0.1, max.cells.per.ident = 200,
+              return.thresh = 0.05, assay = "RNA")
+
+# Filter for genes that are also present in the ST data
+markers_sc <- markers_sc[markers_sc$gene %in% rownames(visium@counts), ]
+
+
+# Select top 20 genes per cluster, select top by first p-value, then absolute diff in pct, then quota of pct.
+markers_sc$pct.diff <- markers_sc$pct.1 - markers_sc$pct.2
+markers_sc$log.pct.diff <- log2((markers_sc$pct.1 * 99 + 1)/(markers_sc$pct.2 * 99 + 1))
+markers_sc %>%
+    group_by(cluster) %>%
+    top_n(-100, p_val) %>%
+    top_n(50, pct.diff) %>%
+    top_n(20, log.pct.diff) -> top20
+m_feats <- unique(as.character(top20$gene))
+
+allen_reference <- allen_reference[row.names (allen_reference) %in% m_feats, ]
+counts <- allen_reference[["RNA"]]@data
+dim (counts)
+
+# See https://www.10xgenomics.com/resources/analysis-guides/integrating-10x-visium-and-chromium-data-with-r
+# Create factors of cell types
+# need a minimum of 25 cells for each cell type in the reference
+
+cell_types_idx <- match (colnames (counts), names (allen_reference$subclass))
+cell_types <- allen_reference$subclass [cell_types_idx]
+table (cell_types)
+
+# Remove /
+cell_types[cell_types == "L2/3 IT"] <- "L2_3 IT"
+
+# Group Sncg (Sncg+ GABAergic neuron) with Sst (Sst+ GABAergic neuron)
+cell_types[cell_types == "Sncg"] <- "Sncg_Sst"
+cell_types[cell_types == "Sst"] <- "Sncg_Sst"
+
+
+
+# Create nUMI
+nUMI <- allen_reference@meta.data$nCount_RNA
+nUMI <- nUMI[cell_types_idx]
+names (nUMI) <- colnames (counts)
+
+reference <- Reference(counts, cell_types, nUMI)
+
+
+## RCTD in multimode
+
+Sys.setenv("OPENBLAS_NUM_THREADS"=2)
+
+myRCTD <- create.RCTD(visium, reference, max_cores = 2)
+
+# full mode, which assigns any number of cell types per spot and is recommended for technologies with poor spatial resolution such as 100-micron resolution Visium; 
+# multi mode, an extension of doublet mode that can discover more than two cell types per spot as an alternative option to full mode
+
+myRCTD <- run.RCTD(myRCTD, doublet_mode = 'multi')
+
+
+
+
+
+
+
+
+
+
 
 
 
