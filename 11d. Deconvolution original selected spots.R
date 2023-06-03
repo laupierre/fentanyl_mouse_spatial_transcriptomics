@@ -36,7 +36,7 @@ norm_weights$selection[norm_weights$selection == "CA2"] <- 0.2
 norm_weights$selection[norm_weights$selection == "CA3"] <- 0.4
 norm_weights$selection[norm_weights$selection == "DG"] <- 0.6
 
-norm_weights$selection <- as.numeric (norm_weights$selection)
+#norm_weights$selection <- as.numeric (norm_weights$selection)
 table (norm_weights$selection)
 
 cell_type_names <- colnames(norm_weights) # List of cell types
