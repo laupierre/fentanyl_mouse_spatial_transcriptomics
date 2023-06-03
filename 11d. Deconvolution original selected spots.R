@@ -49,7 +49,7 @@ midpoint <- 0.4
 #for(i in 1:length(cell_type_names)){
 for(i in dim (norm_weights)[2]){
    print (cell_type_names[i])
-   plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=0.3) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="white", mid="blue", high="darkred")
+   plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), as.numeric (norm_weights[,cell_type_names[i]]), title =cell_type_names[i], size=0.3) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="white", mid="blue", high="darkred")
    ggsave(paste(cell_type_names[i],'_weights.jpg', sep=''), height=8, width=8, units='in', dpi=300)
 }
 
