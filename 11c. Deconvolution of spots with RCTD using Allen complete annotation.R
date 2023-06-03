@@ -169,7 +169,7 @@ colnames (annot) [1] <- "Barcode"
 head (annot)
 
 annot <- merge (annot, prop, by.x="Barcode", by.y= "row.names", all.x=TRUE)
-write.xlsx (annot, "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G1_1A_shmv01_annot.xlsx")
+write.xlsx (annot, "G1_1A_shmv01_annot.xlsx")
 
 
 
