@@ -50,8 +50,18 @@ names (vals) <- row.names (norm_weights)
 midpoint <- 0.4
 i <- 42
    print (cell_type_names[i])
-   plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), vals, title =cell_type_names[i], size=0.3) + ggplot2::scale_colour_gradient2(midpoint = midpoint, low="white", mid="blue", high="darkred")
-   ggsave('preselected_cells.jpg', height=8, width=8, units='in', dpi=300)
+   p <- plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), vals, title =cell_type_names[i], size=0.3) + ggplot2::scale_colour_gradient2(midpoint = midpoint, low="white", mid="darkgreen", high="darkblue")
+   #ggsave('preselected_cells.jpg', height=8, width=8, units='in', dpi=300)
+
+
+library (ggpubr)
+
+pa1 <- ggarrange (p | p, nrow=1, labels="")
+pa2 <- ggarrange (p | p, nrow=1, labels="")
+pall <- ggarrange (pa1, pa2, nrow=2)
+pall
+ggsave("preselected_cells.jpg", height=8, width=8, units='in', dpi=300)
+
 
 
 
