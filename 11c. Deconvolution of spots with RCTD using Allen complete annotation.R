@@ -111,7 +111,8 @@ cell_type1 <- paste (names (cell_types)[1] , cell_types [1], sep="=")
 cell_type2 <- paste (names (cell_types)[2] , cell_types [2], sep="=")
 cell_type3 <- paste (names (cell_types)[3] , cell_types [3], sep="=")
 prop <- data.frame (cell_type1, cell_type2, cell_type3)
-row.names (prop) <- barcodes[i]
+#row.names (prop) <- barcodes[i]
+row.names (prop) <- colnames (myRCTD@spatialRNA@counts)[i]
 propl[[i]] <- prop
 }
 
