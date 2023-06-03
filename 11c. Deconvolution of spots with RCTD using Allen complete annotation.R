@@ -21,7 +21,7 @@ plot_puck_continuous(puck=visium, barcodes=barcodes, plot_val=visium@nUMI,
 
 ## see allen_mouse_adult_brain_single_cell repository (Github) for Allen 1 million cells reference
 
-allen_reference <- readRDS("seurat_allen_small_mouse_brain_with_UMAP.RDS")
+allen_reference <- readRDS("/Volumes/king/haram2023_spatial/seurat_allen_small_mouse_brain_with_UMAP.RDS")
 
 Idents (allen_reference) <- "subclass_label"
 DimPlot(allen_reference, label = TRUE)
