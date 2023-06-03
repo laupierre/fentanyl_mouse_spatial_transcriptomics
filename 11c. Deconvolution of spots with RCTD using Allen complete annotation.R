@@ -141,12 +141,14 @@ cell_type_names <- colnames(norm_weights) # List of cell types
 # Save each plot as a jpg file
 p <- list ()
 a <- 1
+midpoint <- 0.4
 
 #for(i in 1:length(cell_type_names)){
 for(i in c(2,3,4,8)){
    print (cell_type_names[i])
-   p[[a]] <- plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=0.7)
-   # ggsave(paste(resultsdir, cell_type_names[i],'_weights.jpg', sep=''), height=5, width=5, units='in', dpi=300)
+   p[[a]] <- plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=0.3) + ggplot2::scale_colour_gradient2(midpoint = midpoint, low="white", mid="blue", high="darkred")
+   #p[[a]] <- plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), norm_weights[,cell_type_names[i]], title =cell_type_names[i], size=0.7)
+   #ggsave(paste(resultsdir, cell_type_names[i],'_weights.jpg', sep=''), height=5, width=5, units='in', dpi=300)
    a <- a + 1
 }
 
