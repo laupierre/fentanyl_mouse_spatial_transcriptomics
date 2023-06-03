@@ -2,7 +2,7 @@ library (openxlsx)
 library (spacexr)
 library (Seurat)
 library (dplyr)
-
+library (ggplot2)
 
 myRCTD <- readRDS ("myRCTD_visium_allen_full_annot_multi_mode.rds")
 
@@ -36,31 +36,25 @@ norm_weights$selection[norm_weights$selection == "CA2"] <- 0.2
 norm_weights$selection[norm_weights$selection == "CA3"] <- 0.4
 norm_weights$selection[norm_weights$selection == "DG"] <- 0.6
 
-#norm_weights$selection <- as.numeric (norm_weights$selection)
+norm_weights$selection <- as.numeric (norm_weights$selection)
 table (norm_weights$selection)
 
 cell_type_names <- colnames(norm_weights) # List of cell types
 
 
+vals <- as.numeric (norm_weights$selection)
+names (vals) <- row.names (norm_weights)
+
 # Plot cell type probabilities (normalized) per spot (red = 1, blue = 0 probability)
 # Save each plot as a jpg file
 midpoint <- 0.4
-
-#for(i in 1:length(cell_type_names)){
-for(i in dim (norm_weights)[2]){
+i <- 42
    print (cell_type_names[i])
-   plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), as.numeric (norm_weights[,cell_type_names[i]]), title =cell_type_names[i], size=0.3) + ggplot2::scale_colour_gradient2(midpoint = midpoint, low="white", mid="blue", high="darkred")
-   ggsave(paste(cell_type_names[i],'_weights.jpg', sep=''), height=8, width=8, units='in', dpi=300)
-}
+   plot_puck_continuous(myRCTD@spatialRNA, barcodes=colnames (myRCTD@spatialRNA@counts), vals, title =cell_type_names[i], size=0.5) + ggplot2::scale_colour_gradient2(midpoint = midpoint, low="white", mid="blue", high="darkred")
+   ggsave('preselected_cells.jpg', height=8, width=8, units='in', dpi=300)
 
 
 
-library (ggpubr)
-
-pa1 <- ggarrange (p[[1]] | p[[2]], nrow=1, labels="")
-pa2 <- ggarrange (p[[3]] | p[[4]], nrow=1, labels="")
-pall <- ggarrange (pa1, pa2, nrow=2)
-pall
 
 
 
