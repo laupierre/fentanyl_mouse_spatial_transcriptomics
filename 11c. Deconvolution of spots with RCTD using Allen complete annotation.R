@@ -166,10 +166,14 @@ ggsave("cell_weights.jpg", height=8, width=8, units='in', dpi=300)
 
 annot <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G1_1A_shmv01.txt")
 colnames (annot) [1] <- "Barcode"
+annot <- merge (annot, prop, by.x="Barcode", by.y= "row.names", all.x=TRUE)
+
+## Add visium coordinates
+coords <- visium@coords
+annot <- merge (annot, coords, by.x="Barcode", by.y= "row.names", all.x=TRUE)
 head (annot)
 
-annot <- merge (annot, prop, by.x="Barcode", by.y= "row.names", all.x=TRUE)
-write.xlsx (annot, "G1_1A_shmv01_annot.xlsx")
+write.xlsx (annot, "slice_coords_annot.xlsx")
 
 
 
