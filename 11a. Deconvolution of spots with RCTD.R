@@ -61,7 +61,8 @@ saveRDS (myRCTD, "myRCTD_visium_multi_mode.rds")
 
 
 # The results of RCTD multimode are stored in myRCTD@results
-# Each entry represents the estimated proportion of each cell type on each pixel.
+# Each entry represents the estimated proportion of each cell type on each pixel
+# Weights will then add up to one for each pixel, representing cell type proportions
 
 propl <- list ()
 
