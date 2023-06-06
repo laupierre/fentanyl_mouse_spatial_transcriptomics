@@ -55,8 +55,7 @@ keep <- c("CA1-ProS", "CA2-IG-FC", "CA3", "DG")
 brain@meta.data$allen [which (!brain@meta.data$allen %in% keep)] <- "unknown"
 p2 <- SpatialDimPlot(brain, group.by="allen", images = "slice1") + ggplot2::theme(legend.position = "none")
 p2
-ggsave ("version 1 plot.pdf", p1, width=8, height=8)
-
+ggsave ("version 1 plot.pdf", p2, width=8, height=8)
 
 
 ## Add original annotation
@@ -74,7 +73,7 @@ colors= c(CA1 = "red", CA2 = "pink", "CA3" = "green", DG= "blue", unknown = "gre
 
 p3 <- SpatialDimPlot(brain, cols=colors, group.by="preselection", images = "slice1") + ggplot2::theme(legend.position = "none")
 p3
-ggsave ("version 2 plot.pdf", p1, width=8, height=8)
+ggsave ("version 2 plot.pdf", p3, width=8, height=8)
 
 
 
