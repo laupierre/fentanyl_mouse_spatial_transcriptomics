@@ -40,5 +40,18 @@ brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 brain <- UpdateSeuratObject(brain)
 return (brain)
 
+Idents (brain) <- "allen"
+SpatialDimPlot(brain)
+#SpatialDimPlot(brain, group.by = c("allen"))
+
+dg <- subset(brain, idents = c("DG"))
+SpatialDimPlot(dg)
+
+
+
+
+
+
+
 
 
