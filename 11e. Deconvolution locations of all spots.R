@@ -55,6 +55,9 @@ ggplot2::ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
 ## get the palo colors
 ## https://winnie09.github.io/Wenpin_Hou/pages/Palo.html
 
+#saveRDS (brain, "brain_palo.rds")
+#brain <- readRDS ("brain_palo.rds")
+
 library(Palo)
 library(ggplot2)
 
