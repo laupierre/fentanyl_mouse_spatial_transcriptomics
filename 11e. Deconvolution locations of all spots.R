@@ -72,15 +72,13 @@ cl <- Idents(brain)
 names (cl) <- row.names (coords)
 cl <- factor (cl)
 
-
-# Generate a color palette which is used by ggplot2
-
 gg_color_hue <- function(n) {
-  hues = seq(30, 500, length = n + 1)
+  hues = seq(15, 375, length = n + 1)
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
 pal <- gg_color_hue(length(unique(cl)))
 
+## FIXME
 # palopal <- Palo (coords, cl, pal)
 palopal <- pal
 
