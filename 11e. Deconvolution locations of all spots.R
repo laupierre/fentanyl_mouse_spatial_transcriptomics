@@ -40,28 +40,37 @@ brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 brain <- UpdateSeuratObject(brain)
 
 Idents (brain) <- "allen"
-SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none')
+p1 <- SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none')
 #SpatialDimPlot(brain, group.by = c("allen"))
 
 
-# subset to hippocampus
-hip <- subset(brain, idents = c("CA1-ProS", "CA2-IG-FC", "CA3", "DG"))
-SpatialDimPlot(hip, crop=FALSE, label = FALSE, pt.size.factor = 0.8, alpha = 0.9) + ggplot2::theme(legend.position = "none")
-#ggsave("preselected_cells.jpg", height=8, width=8, units='in', dpi=300)
-ggplot2::ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
+## subset to hippocampus (this mess up with the picture resolution)
+#hip <- subset(brain, idents = c("CA1-ProS", "CA2-IG-FC", "CA3", "DG"))
+#p2 <- SpatialDimPlot(hip, crop=FALSE, label = FALSE, pt.size.factor = 0.8, alpha = 0.9) + ggplot2::theme(legend.position = "none")
+##ggsave("preselected_cells.jpg", height=8, width=8, units='in', dpi=300)
+#ggplot2::ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
+
+keep <- c("CA1-ProS", "CA2-IG-FC", "CA3", "DG")
+brain@meta.data$allen [which (!brain@meta.data$allen %in% keep)] <- "unknown"
+p2 <- SpatialDimPlot(brain, group.by="allen", images = "slice1") + ggplot2::theme(legend.position = "none")
+ggsave ("version 1 plot.pdf", p1, width=8, height=8)
 
 
-meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
-meta$Barcode <- paste ("2C_", meta$Barcode, sep="")
-colnames (meta)[1] <- "Barcode"
+
+## Add original annotation
+meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G1_1A_shmv01.csv", sep=",")
+colnames (meta)[2] <- "Barcode"
 colnames (meta)[3] <- "Hip"
 meta <- meta[meta$Hip != "", ]
 
 idx <- match (meta$Barcode, row.names (brain@meta.data))
 stopifnot (length (idx) != 0)
-brain@meta.data$location[idx] <- meta$Hip
+brain@meta.data$preselection <- "Unknown"
+brain@meta.data$preselection[idx] <- meta$Hip
 
-SpatialDimPlot(brain, cols=colors, group.by="location", images = "slice1") + ggplot2::theme(legend.position = "none")
+colors= c(CA1 = "red", CA2 = "pink", "CA3" = "green", DG= "blue", unknown = "grey")
+
+p3 <- SpatialDimPlot(brain, cols=colors, group.by="preselection", images = "slice1") + ggplot2::theme(legend.position = "none")
 ggsave ("version 2 plot.pdf", p1, width=8, height=8)
 
 
