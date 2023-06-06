@@ -66,7 +66,7 @@ coords <- coords[ ,c("row", "col")]
 
 # Get the spot clusters
 Idents (brain) <- "allen"
-#cl <- as.numeric (Idents(brain))
+#cl <- Idents(brain)
 cl <- Idents(brain)
 names (cl) <- row.names (coords)
 cl <- factor (cl)
