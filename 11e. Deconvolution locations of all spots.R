@@ -2,7 +2,7 @@ library (Seurat)
 
 options(Seurat.object.assay.version = "v5")
 
-data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G2-2C"
+data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G1-1A"
 #meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/WORKING/Location information/G2_2C_sniv02.csv", sep=",")
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G1-1A/cell_proportions_allen.txt")
 
@@ -26,14 +26,14 @@ brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
 colnames (meta)[1] <- "Barcode"
-colnames (meta)[2] <- "TOTAL"
 meta1 <- meta
 print (dim (meta1))
 
-cells.use <- meta1$Barcode
-cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
-idx <- match (cells.use, row.names (brain@meta.data))
-brain@meta.data$location [idx] <- meta1$cell_type1[idx]
+tokeep <- row.names (brain@meta.data) [row.names (brain@meta.data) %in% meta1$Barcode]
+brain <- subset (brain, cells = tokeep)
+idx <- match (tokeep, row.names (brain@meta.data))
+brain@meta.data$allen <- meta1$cell_type1[idx]
+brain@meta.data$allen <- gsub ("=.*","", brain@meta.data$allen)
 brain@meta.data$group <- sample.name
 brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 
