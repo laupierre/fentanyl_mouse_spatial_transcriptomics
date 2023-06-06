@@ -41,6 +41,7 @@ brain <- UpdateSeuratObject(brain)
 
 Idents (brain) <- "allen"
 p1 <- SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none')
+p1
 #SpatialDimPlot(brain, group.by = c("allen"))
 
 
@@ -53,6 +54,7 @@ p1 <- SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(leg
 keep <- c("CA1-ProS", "CA2-IG-FC", "CA3", "DG")
 brain@meta.data$allen [which (!brain@meta.data$allen %in% keep)] <- "unknown"
 p2 <- SpatialDimPlot(brain, group.by="allen", images = "slice1") + ggplot2::theme(legend.position = "none")
+p2
 ggsave ("version 1 plot.pdf", p1, width=8, height=8)
 
 
@@ -71,6 +73,7 @@ brain@meta.data$preselection[idx] <- meta$Hip
 colors= c(CA1 = "red", CA2 = "pink", "CA3" = "green", DG= "blue", unknown = "grey")
 
 p3 <- SpatialDimPlot(brain, cols=colors, group.by="preselection", images = "slice1") + ggplot2::theme(legend.position = "none")
+p3
 ggsave ("version 2 plot.pdf", p1, width=8, height=8)
 
 
