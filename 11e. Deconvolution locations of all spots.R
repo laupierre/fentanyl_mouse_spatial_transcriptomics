@@ -75,7 +75,7 @@ gg_color_hue <- function(n) {
 }
 pal <- gg_color_hue(length(unique(cl)))
 
-# palopal <- Palo(coords,cl,pal)
+# palopal <- Palo(coords, cl, pal)
 palopal <- pal
 
 SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none') +
