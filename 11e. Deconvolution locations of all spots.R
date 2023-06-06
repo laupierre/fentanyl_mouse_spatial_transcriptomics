@@ -59,13 +59,14 @@ library(Palo)
 library(ggplot2)
 
 # Get the spatial coordinates (lowres is by default) (or get the UMAP coordinates when available, ie: d[[“umap”]]@cell.embeddings)
-coords <- GetTissueCoordinates(brain,
-          scale = "lowres", cols = c("imagerow", "imagecol"))
+coords <- brain@images$slice1@coordinates
+coords <- coords[ ,c("row", "col")]
 
 # Get the spot clusters
 Idents (brain) <- "allen"
-cl <- as.character (Idents(brain))
-
+cl <- as.numeric (Idents(brain))
+names (cl) <- row.names (coords)
+cl <- factor (cl)
 
 # Generate a color palette which is used by ggplot2
 
@@ -75,7 +76,7 @@ gg_color_hue <- function(n) {
 }
 pal <- gg_color_hue(length(unique(cl)))
 
-# palopal <- Palo(coords, cl, pal)
+# palopal <- Palo (coords, cl, pal)
 palopal <- pal
 
 SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none') +
