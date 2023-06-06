@@ -45,7 +45,7 @@ SpatialDimPlot(brain)
 hip <- subset(brain, idents = c("CA1-ProS", "CA2-IG-FC", "CA3", "DG"))
 SpatialDimPlot(hip, crop=FALSE, label = FALSE, pt.size.factor = 0.8, alpha = 0.9)
 #ggsave("preselected_cells.jpg", height=8, width=8, units='in', dpi=300)
-ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
+ggplot2::ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
 
 
 
