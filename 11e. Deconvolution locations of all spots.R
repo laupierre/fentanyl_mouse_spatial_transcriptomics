@@ -1,4 +1,5 @@
 library (Seurat)
+library (ggplot2)
 
 options(Seurat.object.assay.version = "v5")
 
@@ -39,15 +40,47 @@ brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 brain <- UpdateSeuratObject(brain)
 
 Idents (brain) <- "allen"
-SpatialDimPlot(brain)
+SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none')
 #SpatialDimPlot(brain, group.by = c("allen"))
 
+
+# subset to hippocampus
 hip <- subset(brain, idents = c("CA1-ProS", "CA2-IG-FC", "CA3", "DG"))
 SpatialDimPlot(hip, crop=FALSE, label = FALSE, pt.size.factor = 0.8, alpha = 0.9)
 #ggsave("preselected_cells.jpg", height=8, width=8, units='in', dpi=300)
 ggplot2::ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
 
 
+
+## get the palo colors
+## https://winnie09.github.io/Wenpin_Hou/pages/Palo.html
+
+library(Palo)
+library(ggplot2)
+
+# Get the spatial coordinates (lowres is by default) (or get the UMAP coordinates when available, ie: d[[“umap”]]@cell.embeddings)
+coords <- GetTissueCoordinates(brain,
+          scale = "lowres", cols = c("imagerow", "imagecol"))
+
+# Get the spot clusters
+Idents (brain) <- "allen"
+cl <- Idents(brain)
+
+
+# Generate a color palette which is used by ggplot2
+
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+pal <- gg_color_hue(length(unique(cl)))
+
+palopal <- Palo(coords,cl,pal)
+palopal <- pal
+
+
+SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none') +
+               scale_fill_manual(values=palopal)
 
 
 
