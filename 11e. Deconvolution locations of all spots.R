@@ -59,7 +59,6 @@ ggplot2::ggsave("preselected_cells_normal_slice.pdf", height=8, width=8)
 #brain <- readRDS ("brain_palo.rds")
 
 library(Palo)
-library(ggplot2)
 
 # Get the spatial coordinates (lowres is by default) (or get the UMAP coordinates when available, ie: d[[“umap”]]@cell.embeddings)
 coords <- brain@images$slice1@coordinates
@@ -76,6 +75,7 @@ gg_color_hue <- function(n) {
   hues = seq(15, 375, length = n + 1)
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
+
 pal <- gg_color_hue(length(unique(cl)))
 
 ## FIXME
