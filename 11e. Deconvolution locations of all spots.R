@@ -53,7 +53,7 @@ p1
 
 keep <- c("CA1-ProS", "CA2-IG-FC", "CA3", "DG")
 brain@meta.data$allen [which (!brain@meta.data$allen %in% keep)] <- "unknown"
-colors= c("CA1-ProS" = "blue", "CA2-IG-FC" = "red", "CA3" = "pink", "DG"= "green", "unknown" = "white")
+colors= c("CA1-ProS" = "blue", "CA2-IG-FC" = "red", "CA3" = "pink", "DG"= "darkgreen", "unknown" = "white")
 
 p2 <- SpatialDimPlot(brain, cols=colors, group.by="allen", images = "slice1") + ggplot2::theme(legend.position = "none")
 p2
@@ -71,7 +71,7 @@ stopifnot (length (idx) != 0)
 brain@meta.data$preselection <- "Unknown"
 brain@meta.data$preselection[idx] <- meta$Hip
 
-colors= c(CA1 = "red", CA2 = "pink", "CA3" = "green", DG= "blue", unknown = "grey")
+colors= c(CA1 = "red", CA2 = "pink", "CA3" = "darkgreen", DG= "blue", unknown = "grey")
 
 p3 <- SpatialDimPlot(brain, cols=colors, group.by="preselection", images = "slice1") + ggplot2::theme(legend.position = "none")
 p3
