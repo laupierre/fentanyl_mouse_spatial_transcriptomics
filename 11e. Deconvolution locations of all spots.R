@@ -64,20 +64,19 @@ coords <- GetTissueCoordinates(brain,
 
 # Get the spot clusters
 Idents (brain) <- "allen"
-cl <- Idents(brain)
+cl <- as.character (Idents(brain))
 
 
 # Generate a color palette which is used by ggplot2
 
 gg_color_hue <- function(n) {
-  hues = seq(15, 375, length = n + 1)
+  hues = seq(30, 500, length = n + 1)
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
 pal <- gg_color_hue(length(unique(cl)))
 
-palopal <- Palo(coords,cl,pal)
+# palopal <- Palo(coords,cl,pal)
 palopal <- pal
-
 
 SpatialDimPlot(brain, label = TRUE, label.size = 3, stroke=NA) + theme(legend.position='none') +
                scale_fill_manual(values=palopal)
