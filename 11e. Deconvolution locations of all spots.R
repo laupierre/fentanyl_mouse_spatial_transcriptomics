@@ -53,7 +53,9 @@ p1
 
 keep <- c("CA1-ProS", "CA2-IG-FC", "CA3", "DG")
 brain@meta.data$allen [which (!brain@meta.data$allen %in% keep)] <- "unknown"
-p2 <- SpatialDimPlot(brain, group.by="allen", images = "slice1") + ggplot2::theme(legend.position = "none")
+colors= c("CA1-ProS" = "blue", "CA2-IG-FC" = "red", "CA3" = "pink", "DG"= "green", "unknown" = "white")
+
+p2 <- SpatialDimPlot(brain, cols=colors, group.by="allen", images = "slice1") + ggplot2::theme(legend.position = "none")
 p2
 ggsave ("version 1 plot.pdf", p2, width=8, height=8)
 
