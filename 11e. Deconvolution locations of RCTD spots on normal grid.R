@@ -3,6 +3,8 @@ library (ggplot2)
 
 options(Seurat.object.assay.version = "v5")
 
+## This is only for 1 slice
+
 data.dir <- "/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G1-1A"
 meta <- read.delim ("/Volumes/texas/iit_projects/martina/Northwestern University/NUSeq Core Facility - Martina03_9.16.2021/Space Ranger Output/G1-1A/cell_proportions_allen.txt")
 
