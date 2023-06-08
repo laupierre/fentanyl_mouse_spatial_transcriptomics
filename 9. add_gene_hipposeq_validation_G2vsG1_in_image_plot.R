@@ -39,4 +39,4 @@ gene <- "Il16"
 p <- add_image (gene)
 print (p)
 
-ggsave (paste (gene, 0"hipposeq plot.pdf"), pall1, width=8, height=8)
+ggsave (paste (gene, "hipposeq plot.pdf"), p, width=8, height=8)
