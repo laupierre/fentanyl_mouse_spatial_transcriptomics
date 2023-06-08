@@ -4,6 +4,9 @@ library (Seurat)
 library (dplyr)
 library (ggplot2)
 
+
+## This is for 1 slice only on a puck grid
+
 myRCTD <- readRDS ("myRCTD_visium_allen_full_annot_multi_mode.rds")
 
 weights <- list ()
