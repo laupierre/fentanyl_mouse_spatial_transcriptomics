@@ -1,5 +1,5 @@
 ## This is not compatible with the preselected cells depicted in output of 9. add_selected_cells_in_substructures_G2vsG1_image_plot.R
-# SpatialFeaturePlot and SpatialDimPlot don't have the same resolution!
+# SpatialFeaturePlot and SpatialDimPlot have the same resolution only with the correct theme!
 
 library (Seurat)
 library (ggpubr)
