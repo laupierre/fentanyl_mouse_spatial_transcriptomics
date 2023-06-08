@@ -1,4 +1,5 @@
 ## This is the screening of the Hippo-Seq data
+## To increase the speed of screening, we output two slices only (out of 4)
 
 library (Seurat)
 library (ggpubr)
