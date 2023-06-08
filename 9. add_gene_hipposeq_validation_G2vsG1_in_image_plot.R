@@ -41,3 +41,6 @@ p <- add_image (gene)
 print (p)
 
 ggsave (paste (gene, "hipposeq plot.jpeg"), p, units="in", width=8, height=8, dpi=300)
+
+
+
