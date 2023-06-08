@@ -73,7 +73,7 @@ pa2 <- ggarrange (p4 | p3, nrow=1, labels="G1")
 pall1 <- ggarrange (pa1, pa2, nrow=2)
 
 ggsave ("selected cells highlight substructures plot.pdf", pall1, width=8, height=8)
-# ggsave ("selected cells highlight substructures plot.jpeg", p, units="in", width=8, height=8, dpi=300)
+# ggsave ("selected cells highlight substructures plot.jpeg", pall1, units="in", width=8, height=8, dpi=300)
 
 
 
