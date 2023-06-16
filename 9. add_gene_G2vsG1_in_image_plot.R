@@ -13,6 +13,7 @@ Images (brain)
 # "slice1"   "slice1.2" "slice1.3" "slice1.4"
 # G2-2C, G2-2A, G1-1C, G1-1A
 
+	
 add_image <- function (gene) {
 max_gene <- max (brain[["SCT"]]$data [row.names (brain[["SCT"]]$data) == gene, ])
 midpoint <- max_gene /2
