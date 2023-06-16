@@ -48,6 +48,7 @@ gene <- "Plppr4"
 pall3 <- add_image (gene)
 pall3
 
+ggsave (paste (gene, " version 3 plot.pdf", sep=""), pall3, width=8, height=8)
 
 
 ## with cropping
@@ -78,4 +79,10 @@ return (pall1)
 gene <- "Plppr4"
 pall3 <- add_image (gene)
 pall3
+
+
+ggsave (paste (gene, " version 4 plot.pdf", sep=""), pall3, width=8, height=8)
+
+
+
 
