@@ -52,7 +52,7 @@ ggsave (paste (gene, " version 3 plot.pdf", sep=""), pall3, width=8, height=8)
 
 
 
-## with cropping
+## with cropping, the figure is stitched, see https://github.com/satijalab/seurat/issues/5212
 
 add_image <- function (gene) {
 max_gene <- max (brain[["SCT"]]$data [row.names (brain[["SCT"]]$data) == gene, ])
