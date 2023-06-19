@@ -37,7 +37,15 @@ return (pall1)
 }
 
 
-gene <- "Plppr4"
+# check the universal background of Ttr
+gene <- "Ttr"
+pall3 <- add_image (gene)
+pall3
+
+ggsave (paste (gene, " version 2 plot.pdf", sep=""), pall3, width=8, height=8)
+
+# check the universal background of Hpca
+gene <- "Hpca"
 pall3 <- add_image (gene)
 pall3
 
