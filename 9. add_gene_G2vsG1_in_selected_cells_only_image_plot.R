@@ -58,14 +58,14 @@ max_gene <- max (brain.s[["SCT"]]$data [row.names (brain.s[["SCT"]]$data) == gen
 midpoint <- max_gene /2
 
 
-p1 <- SpatialFeaturePlot(brain.s, images=c("slice1"),  pt.size.factor = 1, crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
+p1 <- SpatialFeaturePlot(brain.s, images=c("slice1"), crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
 						 breaks = round (seq(0, max_gene, length.out = 6), digits=1))
-p2 <- SpatialFeaturePlot(brain.s, images=c("slice1.2"),  pt.size.factor = 1, crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
+p2 <- SpatialFeaturePlot(brain.s, images=c("slice1.2"), crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
 						 breaks = round (seq(0, max_gene, length.out = 6), digits=1))
 
-p3 <- SpatialFeaturePlot(brain.s, images=c("slice1.3"),  pt.size.factor = 1, crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
+p3 <- SpatialFeaturePlot(brain.s, images=c("slice1.3"), crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
 						 breaks = round (seq(0, max_gene, length.out = 6), digits=1))
-p4 <- SpatialFeaturePlot(brain.s, images=c("slice1.4"),  pt.size.factor = 1, crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
+p4 <- SpatialFeaturePlot(brain.s, images=c("slice1.4"), crop=TRUE, pt.size.factor = 4, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
 						 breaks = round (seq(0, max_gene, length.out = 6), digits=1))
 
 pa1 <- ggarrange (p2 | p1, nrow=1, labels="G2")
