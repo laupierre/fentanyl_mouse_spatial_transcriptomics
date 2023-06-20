@@ -21,8 +21,9 @@ brain <- brain[!grepl("^mt-", rownames(brain)), ]
 # remove Hemoglobin genes (if that is a problem on your data)
 brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 
-# normalization (of one slide)
+# normalization (of one slice)
 #brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+# see normalization intra-slice
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
 colnames (meta)[2] <- "TOTAL"
@@ -32,9 +33,13 @@ print (dim (meta1))
 
 cells.use <- meta1$Barcode
 cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
-idx <- match (cells.use, row.names (brain@meta.data))
+#idx <- match (cells.use, row.names (brain@meta.data))
+# new
+idx <- match (meta$Barcode, row.names (brain@meta.data))
 brain@meta.data$location <- "unknown"
-brain@meta.data$location [idx] <- "Hippocampus"
+#brain@meta.data$location [idx] <- "Hippocampus"
+# new
+brain@meta.data$location <- meta$Hip   
 brain@meta.data$group <- sample.name
 brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
 
