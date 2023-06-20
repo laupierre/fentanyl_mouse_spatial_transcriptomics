@@ -154,7 +154,7 @@ counts <- counts[row.names (counts) %in% row.names (prop), ]
 dim (counts)
 # 9199  229
 
-#### End of optional step: Dropout removal
+#### End of optional step: Gene dropout removal
 
 
 
