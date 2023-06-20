@@ -9,9 +9,13 @@ library (sctransform)
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 
+
 ## Here we are normalizing the hippocampus cells only with lognorm (and not the entire brain)
 
-counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+#counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+
+myarea <- "DG"
+counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == myarea)])
 dim (counts)
 # 18827   229
 
@@ -27,11 +31,13 @@ dim (counts)
 # 12381   229
 
 
-meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+#meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == myarea), ]
 # we need cell_type (hippocampus), replicate (mouse origin), and label (treatment, i.e G2 or G1 groups)
 meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
 meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
-meta.ss2$cell_type <- "Hippocampus"
+#meta.ss2$cell_type <- "Hippocampus"
+meta.ss2$cell_type <- myarea
 meta <- meta.ss2
 
 idx <- match (colnames (counts), row.names (meta))
@@ -42,7 +48,7 @@ mymean <- data.frame (mean= apply (counts, 1, mean))
 
 
 
-##  Pseudobulk construction
+##  Pseudobulk construction of 4 pseudo-mice
 
 meta$mouse <- paste (meta$replicate, meta$label, sep=":")
 mouse <- unique (meta$mouse)
@@ -88,11 +94,25 @@ res.voom <- res
 res <- topTable(tmp, sort.by = "p", n = Inf) 
 res <- cbind (data.frame (gene_name= row.names (res), res))
 
-write.xlsx (res, "pseudobulk_hippocampus_lognorm_selected_cells.xlsx", rowNames=F)
+write.xlsx (res, paste (myarea, "_area_pseudobulk_hippocampus_lognorm_selected_cells.xlsx", sep=""), rowNames=F)
+
+
+## Sanity check
+
+sel <- read.xlsx (paste (paste ("table 1.", myarea), "_area_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""))
+
+sel <- merge (sel, res, by.x="gene", by.y="gene_name")
+head (sel)
+
+plot (sel$avg_logFC, sel$logFC, xlab= "normalization selected cells (Libra)", ylab="Pseudobulks")
+abline (0,1,col="red")
+abline (h=0)
+abline (v=0)
 
 
 
 
+############
 ##### No main differences when compared to the alternative methods 
 
 ## voomQW with sample variability
