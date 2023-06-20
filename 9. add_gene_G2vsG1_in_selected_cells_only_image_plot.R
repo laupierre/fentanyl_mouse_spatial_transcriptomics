@@ -133,7 +133,7 @@ dev.off ()
 
 
 
-# subset the selected hippocampal spots only
+# subset the selected hippocampal spots only and rotate the grid
 
 Idents (brain) <- "location"
 # brain <- subset (brain, idents = c("Hippocampus"))
