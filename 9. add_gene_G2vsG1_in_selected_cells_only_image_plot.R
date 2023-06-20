@@ -13,6 +13,8 @@ Images (brain)
 # "slice1"   "slice1.2" "slice1.3" "slice1.4"
 # G2-2C, G2-2A, G1-1C, G1-1A
 
+myarea <- c("DG", "CA1", "CA2", "CA3")
+
 
 ## without cropping
 
@@ -50,7 +52,8 @@ ggsave (paste (gene, " version 3 plot.pdf", sep=""), pall3, width=8, height=8)
 
 ## subset to the selected hippocampal spots only
 Idents (brain) <- "location"
-brain.s <- subset (brain, idents = c("Hippocampus"))
+# brain.s <- subset (brain, idents = c("Hippocampus"))
+brain.s <- subset (brain, idents = myarea)
 
 
 add_image <- function (gene) {
@@ -133,7 +136,8 @@ dev.off ()
 # subset the selected hippocampal spots only
 
 Idents (brain) <- "location"
-brain <- subset (brain, idents = c("Hippocampus"))
+# brain <- subset (brain, idents = c("Hippocampus"))
+brain.s <- subset (brain, idents = myarea)
 
 gene <- "Ttr"
 pall3 <- add_image (gene)
