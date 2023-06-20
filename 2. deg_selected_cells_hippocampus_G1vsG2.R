@@ -178,7 +178,7 @@ meta.ss2 <- meta.ss2[idx, ]
 stopifnot (row.names (meta.ss2) == colnames (counts))
 
 seurat.ss2@meta.data <- meta.ss2
-table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
+table (seurat.ss2@meta.data$label)   # run_de will compare G1 vs G2
 # G1  G2 
 #120 109 
 
@@ -186,6 +186,7 @@ table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
 res <- data.frame (res)
 row.names (res) <- res$gene
+# we want G2 vs G1
 res$avg_logFC <- -1 * res$avg_logFC
 
 
