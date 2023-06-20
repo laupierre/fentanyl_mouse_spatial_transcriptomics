@@ -101,7 +101,8 @@ write.xlsx (res, paste (myarea, "_area_pseudobulk_hippocampus_lognorm_selected_c
 
 sel <- read.xlsx (paste (paste ("table 1.", myarea), "_area_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""))
 
-sel <- merge (sel, res, by.x="gene", by.y="gene_name")
+# sel <- merge (sel, res, by.x="gene", by.y="gene_name")
+sel <- merge (sel, res, by.x="gene", by.y="row.names")
 head (sel)
 
 plot (sel$avg_logFC, sel$logFC, xlab= "normalization selected cells (Libra)", ylab="Pseudobulks")
