@@ -21,7 +21,7 @@ brain <- brain[!grepl("^mt-", rownames(brain)), ]
 # remove Hemoglobin genes (if that is a problem on your data)
 brain <- brain[!grepl("^Hb.*-", rownames(brain)), ]
 
-# normalization
+# normalization (of one slide)
 #brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 # SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
@@ -67,7 +67,8 @@ brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2C", "2A
 
 DefaultAssay(brain) <- "Spatial"
 brain <- JoinLayers (brain)
-brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+## SCT normalization of all slides (deprecated method)
+#brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 saveRDS (brain, "brain_G2G1_groups.rds")
 
 
