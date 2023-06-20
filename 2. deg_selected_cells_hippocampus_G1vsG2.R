@@ -190,10 +190,10 @@ res$avg_logFC <- -1 * res$avg_logFC
 
 
 ## Add the cell proportion
-res <- merge (res, prop, by="row.names")
-res <- res[ ,-1]
-res <- res[ ,-dim (res)[2]]
-row.names (res) <- res$gene_name 
+#res <- merge (res, prop, by="row.names")
+#res <- res[ ,-1]
+#res <- res[ ,-dim (res)[2]]
+#row.names (res) <- res$gene_name 
 
 ## Add numa info
 res <- merge (res, numa, by.x="gene", by.y="row.names")
@@ -259,26 +259,6 @@ abline (v=0)
 plot (resa$avg_logFC, -resa$logFC, xlab="Wilcoxon log fold change", ylab="limma log fold change (G1 vs G2)")
 abline (h=0)
 abline (v=0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
