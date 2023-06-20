@@ -28,7 +28,11 @@ options(Seurat.object.assay.version = "v5")
 brain <- readRDS ("brain_G2G1_groups.rds")
 
 # raw counts
-counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+# deprecated
+#counts <- as.matrix (brain[["SCT"]]$counts [ ,WhichCells(brain, expression = location == "Hippocampus")])
+
+myarea <- "DG"
+counts <- as.matrix (brain[["Spatial"]]$counts [ ,WhichCells(brain, expression = location == myarea)])
 dim (counts)
 # 18827   229
 
@@ -86,7 +90,6 @@ colnames (prop) <- c("G1","G2")
 
 numa <- cbind (numa, prop)
 
-
 prop2 <- data.frame (G1_prop= prop$G1 / (dim (counts.g1) [2] + dim (counts.g3) [2]))
 prop3 <- data.frame (G2_prop= prop$G2 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
 prop <- round (cbind (prop2 *100, prop3*100), digits=1)
@@ -134,7 +137,7 @@ p1 <- ggplot(data = prop, mapping = aes(x=prop1)) +
 p2 <- ggplot(data = prop, mapping = aes(x=prop2)) + 
   geom_histogram(aes(y=..density..),fill="bisque",color="white",alpha=0.7, bins=20)  +
   geom_density() + xlab ("Percentage of zeros") + ylab ("Density of expressed genes") + geom_vline(xintercept=75, linetype="dashed", color = "red") +
-  ggtitle ("Percentage of zeros in the G3 group") 
+  ggtitle ("Percentage of zeros in the G2 group") 
   
 p3 <- ggarrange (p1, p2, nrow=1)
 p3
@@ -151,7 +154,7 @@ counts <- counts[row.names (counts) %in% row.names (prop), ]
 dim (counts)
 # 9199  229
 
-#### End of optional: Dropout removal
+#### End of optional step: Dropout removal
 
 
 
@@ -160,11 +163,13 @@ dim (counts)
 counts <- as (counts, "sparseMatrix")
 seurat.ss2 <- CreateSeuratObject(counts)
 
-meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+#meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == myarea), ]
 # we need cell_type (eg hippocampus), replicate (eg mouse), and label (eg treatment)
 meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
 meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
-meta.ss2$cell_type <- "Hippocampus"
+#meta.ss2$cell_type <- "Hippocampus"
+meta.ss2$cell_type <- myarea
 
 meta.ss2 <- meta.ss2[row.names (meta.ss2) %in% colnames (counts), ]
 idx <- match (row.names (meta.ss2), colnames (counts))
@@ -180,24 +185,19 @@ table (seurat.ss2@meta.data$label)   # It will compare G1 vs G2
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
 res <- data.frame (res)
 row.names (res) <- res$gene
-res <- merge (res, mymean, by="row.names")
-res <- res[order (res$p_val_adj), ]
-row.names (res) <- res$gene
-colnames (res)[1] <- "gene_name"
 res$avg_logFC <- -1 * res$avg_logFC
 
 
 ## Add the cell proportion
-res <- merge (res,prop, by="row.names")
+res <- merge (res, prop, by="row.names")
 res <- res[ ,-1]
 res <- res[ ,-dim (res)[2]]
 row.names (res) <- res$gene_name 
 
 ## Add numa info
-res <- merge (res, numa, by="row.names")
-res <- res[ ,-1]
-row.names (res) <- res$gene_name 
-
+res <- merge (res, numa, by.x="gene", by.y="row.names")
+row.names (res) <- res$gene 
+res <- res[order (res$p_val_adj), ]
 
 
 ## Annotation
@@ -217,12 +217,10 @@ table (res$p_val_adj < 0.05)
 #FALSE  TRUE 
 # 9095   104 
 
-#write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
-write.xlsx (res, "table 1. hippocampus_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", rowNames=F)
-
-
 boxplot (res$avg_logFC)
 abline (h=0)
+
+write.xlsx (res, paste (paste ("table 1.", myarea), "_area_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""), rowNames=F)
 
 
 
@@ -256,6 +254,7 @@ plot (resa$avg_logFC, resa$logFC, xlab="Wilcoxon log fold change", ylab="limma l
 abline (h=0)
 abline (v=0)
 
+## Sanity
 plot (resa$avg_logFC, -resa$logFC, xlab="Wilcoxon log fold change", ylab="limma log fold change (G1 vs G2)")
 abline (h=0)
 abline (v=0)
