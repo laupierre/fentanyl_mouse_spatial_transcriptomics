@@ -43,7 +43,7 @@ dim (counts)
 
 
 
-#### Optional: Dropout analysis (on the entire brain)
+#### Optional: Dropout analysis (on the selected cells)
 
 
 ## Step1 (numa)
