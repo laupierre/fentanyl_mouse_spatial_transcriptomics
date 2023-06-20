@@ -49,6 +49,7 @@ dim (counts)
 ## Step1 (numa)
 
 meta <- brain@meta.data
+
 meta.g1 <- meta[grep ("G1-1A", meta$group), ]
 meta.g1 <- meta.g1 [row.names (meta.g1) %in% colnames (counts), ]
 table (meta.g1$group)
@@ -75,22 +76,20 @@ dim (counts.g3)
 counts.g4 <- counts[ ,colnames (counts) %in% row.names (meta.g4)]
 dim (counts.g4)
 
-# Percentage of cells expressing a gene
-prop1 <- data.frame (G1_1A= apply (counts.g1, 1, function (x) {sum (x == 0)}))
-prop2 <- data.frame (G2_2A= apply (counts.g2, 1, function (x) {sum (x == 0)}))
-prop3 <- data.frame (G1_1C= apply (counts.g3, 1, function (x) {sum (x == 0)}))
-prop4 <- data.frame (G2_2C= apply (counts.g4, 1, function (x) {sum (x == 0)}))
-prop1  <- table (meta.g1$group)[[1]] - prop1
-prop2  <- table (meta.g2$group)[[1]] - prop2
-prop3  <- table (meta.g3$group)[[1]] - prop3
-prop4  <- table (meta.g4$group)[[1]] - prop4
+# Number of cells that express a gene (for all genes)
+prop1 <- data.frame (G1_1A= apply (counts.g1, 1, function (x) {sum (x != 0)}))
+prop2 <- data.frame (G2_2A= apply (counts.g2, 1, function (x) {sum (x != 0)}))
+prop3 <- data.frame (G1_1C= apply (counts.g3, 1, function (x) {sum (x != 0)}))
+prop4 <- data.frame (G2_2C= apply (counts.g4, 1, function (x) {sum (x != 0)}))
 numa <- cbind (prop1, prop2, prop3, prop4)
 
+# Add the two numbers of cells
 prop <- cbind ( data.frame (G1= prop1+prop3), data.frame (G2= prop2+prop4))
 colnames (prop) <- c("G1","G2")
 
 numa <- cbind (numa, prop)
 
+# Percentage of expressing cells in a group
 prop2 <- data.frame (G1_prop= prop$G1 / (dim (counts.g1) [2] + dim (counts.g3) [2]))
 prop3 <- data.frame (G2_prop= prop$G2 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
 prop <- round (cbind (prop2 *100, prop3*100), digits=1)
