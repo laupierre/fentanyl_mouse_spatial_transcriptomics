@@ -141,7 +141,7 @@ brain.s <- subset (brain, idents = myarea)
 
 
 add_image <- function (gene) {
-max_gene <- max (brain[["SCT"]]$data [row.names (brain[["SCT"]]$data) == gene, ])
+max_gene <- max (brain.s[["SCT"]]$data [row.names (brain.s[["SCT"]]$data) == gene, ])
 midpoint <- max_gene /2
 
 p1 <- SpatialFeaturePlot(brain.s, images=c("slice1"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
