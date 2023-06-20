@@ -87,7 +87,7 @@ ggsave (paste (gene, " version 4 plot.pdf", sep=""), pall3, width=8, height=8)
 
 
 
-## without cropping and rotating the image to be on correct orientation
+## without cropping and rotating the image on the correct axis
 
 add_image <- function (gene) {
 max_gene <- max (brain[["SCT"]]$data [row.names (brain[["SCT"]]$data) == gene, ])
