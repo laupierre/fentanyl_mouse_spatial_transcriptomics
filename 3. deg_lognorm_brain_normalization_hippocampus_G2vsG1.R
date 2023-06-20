@@ -87,7 +87,10 @@ res.mean <- res
 
 ## Extract the cells of interest, i.e hippocampus
 
-meta.s <- meta[meta$location == "Hippocampus", ]
+#meta.s <- meta[meta$location == "Hippocampus", ]
+
+myarea <- "DG"
+meta.s <- meta[meta$location == myarea, ]
 
 counts <- counts[ ,colnames (counts) %in% row.names (meta.s)]
 idx <- match (row.names (meta.s), colnames (counts))
@@ -153,10 +156,21 @@ idx <- match (res$gene_name, names (res1a))
 res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$padj), ]
 
-write.xlsx (res, "table 4. hippocampus_G2vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+write.xlsx (res, paste (paste ("table 4.", myarea), "_area_G2vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", sep=""), rowNames=F)
 
 
+## Sanity check
+sel <- read.xlsx (paste (paste ("table 1.", myarea), "_area_G2vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""))
 
+sel <- merge (sel, res, by.x="gene", by.y="gene_name")
+head (sel)
+
+plot (sel$avg_logFC, sel$log.fold.change, xlab= "normalization selected cells (Libra)", ylab="SCT flavor 2")
+abline (0,1,col="red")
+abline (h=0)
+abline (v=0)
+
+## SCT is more conservative as expected !
 
 
 
