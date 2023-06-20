@@ -140,7 +140,7 @@ Idents (brain) <- "location"
 brain.s <- subset (brain, idents = myarea)
 
 
-## keep original colors of the entire brain
+## keep original colors of the entire brain (see below)
 
 add_image <- function (gene, max_gene, midpoint) {
 
@@ -164,7 +164,6 @@ return (pall1)
 gene <- "Ttr"
 
 ## keep original colors of the entire brain
-
 max_gene <- max (brain[["SCT"]]$data [row.names (brain[["SCT"]]$data) == gene, ])
 midpoint <- max_gene /2
 
