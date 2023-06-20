@@ -7,9 +7,13 @@ library(scran)
 library (scater)
 library (SingleCellExperiment)
 library (openxlsx)
+library (sctransform)
+
 
 brain <- readRDS ("brain_G2G1_groups.rds")
 brain
+
+brain <- SCTransform(brain, vst.flavor = "v2") 
 
 #counts <- brain[["Spatial"]]$counts
 #colData <- brain@meta.data
