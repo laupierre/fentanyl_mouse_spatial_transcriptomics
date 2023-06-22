@@ -32,13 +32,20 @@ print (dim (meta1))
 
 cells.use <- meta1$Barcode
 cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
-idx <- match (cells.use, row.names (brain@meta.data))
+#idx <- match (cells.use, row.names (brain@meta.data))
+# new
+idx <- match (meta1$Barcode, row.names (brain@meta.data))
 brain@meta.data$location <- "unknown"
-brain@meta.data$location [idx] <- "Hippocampus"
+#brain@meta.data$location [idx] <- "Hippocampus"
+# new
+brain@meta.data$location[idx] <- meta1$Hip   
 brain@meta.data$group <- sample.name
 brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
-
+# sanity check
+san <- merge (brain@meta.data, meta1, by.x="row.names", by.y="Barcode")
+stopifnot (san$location == san$Hip)
 brain <- UpdateSeuratObject(brain)
+  
 return (brain)
 }
 
@@ -67,6 +74,7 @@ brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("1A", "1B
 
 DefaultAssay(brain) <- "Spatial"
 brain <- JoinLayers (brain)
-brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+## SCT normalization of all slides (deprecated method)
+#brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 saveRDS (brain, "brain_slide1_G1G3_groups.rds")
 
