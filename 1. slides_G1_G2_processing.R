@@ -31,6 +31,14 @@ meta <- meta[meta$TOTAL == "rHEMI", ]
 meta1 <- meta[meta$Hip != "", ]
 print (dim (meta1))
 
+#cells.use <- meta1$Barcode
+#cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
+#idx <- match (cells.use, row.names (brain@meta.data))
+#brain@meta.data$location <- "unknown"
+#brain@meta.data$location [idx] <- "Hippocampus"
+#brain@meta.data$group <- sample.name
+#brain@meta.data$cell <- paste (row.names(brain@meta.data), sample.name, sep="-")
+
 cells.use <- meta1$Barcode
 cells.use <- cells.use[cells.use %in% row.names (brain@meta.data)]
 #idx <- match (cells.use, row.names (brain@meta.data))
