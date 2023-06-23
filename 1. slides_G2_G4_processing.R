@@ -74,7 +74,8 @@ brain <- merge(brain1, y = c(brain2, brain3, brain4), add.cell.ids = c("2A", "2B
 
 DefaultAssay(brain) <- "Spatial"
 brain <- JoinLayers (brain)
-brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
+## SCT normalization of all slides (deprecated method)
+#brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 saveRDS (brain, "brain_slide2_G2G4_groups.rds")
 
 
