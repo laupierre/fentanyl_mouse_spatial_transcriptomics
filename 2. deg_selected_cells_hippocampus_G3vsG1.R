@@ -2,6 +2,7 @@ library (Libra)
 library (Seurat)
 library (openxlsx)
 
+options(Seurat.object.assay.version = "v5")
 
 brain <- readRDS ("brain_slide1_G1G3_groups.rds")
 
@@ -22,35 +23,13 @@ dim (counts)
 
 #### Optional: Dropout removal
 
-## FIXME START 
-#meta <- brain@meta.data
-#meta.g1 <- meta[grep ("G1", meta$group), ]
-#meta.g1 <- meta.g1 [row.names (meta.g1) %in% colnames (counts), ]
-#table (meta.g1$group)
-
-#meta.g2 <- meta[grep ("G3", meta$group), ]
-#meta.g2 <- meta.g2 [row.names (meta.g2) %in% colnames (counts), ]
-#table (meta.g2$group)
-
-#counts.g1 <- counts[ ,colnames (counts) %in% row.names (meta.g1)]
-#dim (counts.g1)
-#counts.g2 <- counts[ ,colnames (counts) %in% row.names (meta.g2)]
-#dim (counts.g2)
-
-## Percentage of cells with zeros (for each gene)
-#prop1 <- data.frame (prop1= apply (counts.g1, 1, function (x) {sum (x == 0)}))
-#prop2 <- data.frame (prop2= apply (counts.g2, 1, function (x) {sum (x == 0)}))
-#prop <- cbind (prop1/dim (counts.g1)[2] *100, prop2/dim (counts.g2)[2] *100)
-#head (prop)
-
-
 meta <- brain@meta.data
 
 meta.g1 <- meta[grep ("G1-1A", meta$group), ]
 meta.g1 <- meta.g1 [row.names (meta.g1) %in% colnames (counts), ]
 table (meta.g1$group)
 
-meta.g2 <- meta[grep ("G2-2A", meta$group), ]
+meta.g2 <- meta[grep ("G3-1B", meta$group), ]
 meta.g2 <- meta.g2 [row.names (meta.g2) %in% colnames (counts), ]
 table (meta.g2$group)
 
@@ -58,7 +37,7 @@ meta.g3 <- meta[grep ("G1-1C", meta$group), ]
 meta.g3 <- meta.g3 [row.names (meta.g3) %in% colnames (counts), ]
 table (meta.g3$group)
 
-meta.g4 <- meta[grep ("G2-2C", meta$group), ]
+meta.g4 <- meta[grep ("G3-1D", meta$group), ]
 meta.g4 <- meta.g4 [row.names (meta.g4) %in% colnames (counts), ]
 table (meta.g4$group)
 
@@ -80,14 +59,14 @@ prop4 <- data.frame (G2_2C= apply (counts.g4, 1, function (x) {sum (x != 0)}))
 numa <- cbind (prop1, prop2, prop3, prop4)
 
 # Add the two numbers of cells
-prop <- cbind ( data.frame (G1= prop1+prop3), data.frame (G2= prop2+prop4))
-colnames (prop) <- c("G1","G2")
+prop <- cbind ( data.frame (G1= prop1+prop3), data.frame (G3= prop2+prop4))
+colnames (prop) <- c("G1","G3")
 
 numa <- cbind (numa, prop)
 
 # Percentage of expressing cells in a group
 prop2 <- data.frame (G1_prop= prop$G1 / (dim (counts.g1) [2] + dim (counts.g3) [2]))
-prop3 <- data.frame (G2_prop= prop$G2 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
+prop3 <- data.frame (G3_prop= prop$G2 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
 prop <- round (cbind (prop2 *100, prop3*100), digits=1)
 
 numa <- cbind (numa, prop)
@@ -103,7 +82,7 @@ meta.g1 <- meta[grep ("G1", meta$group), ]
 meta.g1 <- meta.g1 [row.names (meta.g1) %in% colnames (counts), ]
 table (meta.g1$group)
 
-meta.g2 <- meta[grep ("G2", meta$group), ]
+meta.g2 <- meta[grep ("G3", meta$group), ]
 meta.g2 <- meta.g2 [row.names (meta.g2) %in% colnames (counts), ]
 table (meta.g2$group)
 
