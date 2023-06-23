@@ -10,6 +10,9 @@ library (openxlsx)
 brain <- readRDS ("brain_slide1_G1G3_groups.rds")
 brain
 
+brain <- SCTransform(brain, vst.flavor = "v2") 
+
+
 sce <- as.SingleCellExperiment(brain)
 
 # add a low expression gene filtering
@@ -57,9 +60,13 @@ abline (h=0)
 res.mean <- res
 
 
+
 ## Extract the cells of interest, i.e hippocampus
 
-meta.s <- meta[meta$location == "Hippocampus", ]
+#meta.s <- meta[meta$location == "Hippocampus", ]
+
+myarea <- "DG"
+meta.s <- meta[meta$location == myarea, ]
 
 counts <- counts[ ,colnames (counts) %in% row.names (meta.s)]
 idx <- match (row.names (meta.s), colnames (counts))
@@ -113,7 +120,6 @@ table (res$padj < 0.05)
 
 library('org.Mm.eg.db')
 
-#columns(org.Mm.eg.db)
 symbols <- res$gene_name
 res1a <- mapIds(org.Mm.eg.db, symbols, 'GENENAME', 'SYMBOL')
 
@@ -121,7 +127,22 @@ idx <- match (res$gene_name, names (res1a))
 res$Description <- as.vector (res1a) [idx]
 res <- res[order (res$padj), ]
 
-write.xlsx (res, "table 5. hippocampus_G3vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+boxplot (res$log.fold.change)
+abline (h=0)
+
+write.xlsx (res, paste (paste ("table 5.", myarea), "_area_G3vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", sep=""), rowNames=F)
+
+
+## Sanity check
+sel <- read.xlsx (paste (paste ("table 1.", myarea), "_area_G3vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""))
+
+sel <- merge (sel, res, by.x="gene", by.y="gene_name")
+head (sel)
+
+plot (sel$avg_logFC, sel$log.fold.change, xlab= "normalization selected cells (Libra)", ylab="SCT flavor 2")
+abline (0,1,col="red")
+abline (h=0)
+abline (v=0)
 
 
 
