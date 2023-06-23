@@ -23,6 +23,8 @@ dim (counts)
 
 #### Optional: Dropout removal
 
+## Step1
+
 meta <- brain@meta.data
 
 meta.g1 <- meta[grep ("G1-1A", meta$group), ]
@@ -53,9 +55,9 @@ dim (counts.g4)
 
 # Number of cells that express a gene (for all genes)
 prop1 <- data.frame (G1_1A= apply (counts.g1, 1, function (x) {sum (x != 0)}))
-prop2 <- data.frame (G2_2A= apply (counts.g2, 1, function (x) {sum (x != 0)}))
+prop2 <- data.frame (G3_1B= apply (counts.g2, 1, function (x) {sum (x != 0)}))
 prop3 <- data.frame (G1_1C= apply (counts.g3, 1, function (x) {sum (x != 0)}))
-prop4 <- data.frame (G2_2C= apply (counts.g4, 1, function (x) {sum (x != 0)}))
+prop4 <- data.frame (G3_1D= apply (counts.g4, 1, function (x) {sum (x != 0)}))
 numa <- cbind (prop1, prop2, prop3, prop4)
 
 # Add the two numbers of cells
@@ -66,13 +68,11 @@ numa <- cbind (numa, prop)
 
 # Percentage of expressing cells in a group
 prop2 <- data.frame (G1_prop= prop$G1 / (dim (counts.g1) [2] + dim (counts.g3) [2]))
-prop3 <- data.frame (G3_prop= prop$G2 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
+prop3 <- data.frame (G3_prop= prop$G3 / (dim (counts.g2) [2] + dim (counts.g4) [2]))
 prop <- round (cbind (prop2 *100, prop3*100), digits=1)
 
 numa <- cbind (numa, prop)
 head (numa)
-
-## END FIXME
 
 
 
@@ -139,11 +139,11 @@ dim (counts)
 counts <- as (counts, "sparseMatrix")
 seurat.ss2 <- CreateSeuratObject(counts)
 
-meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == myarea), ]
 # we need cell_type (eg hippocampus), replicate (eg mouse), and label (eg treatment)
 meta.ss2$replicate <- gsub (".*-", "", meta.ss2$group)
 meta.ss2$label <- gsub ("-.*", "", meta.ss2$group)
-meta.ss2$cell_type <- "Hippocampus"
+meta.ss2$cell_type <- myarea
 
 meta.ss2 <- meta.ss2[row.names (meta.ss2) %in% colnames (counts), ]
 idx <- match (row.names (meta.ss2), colnames (counts))
@@ -156,27 +156,20 @@ table (seurat.ss2@meta.data$label)   # run_de will compare G1 vs G3
 #120 132 
 
 
-
 res <- run_de(seurat.ss2, de_method = 'wilcox', de_family= "singlecell")
 res <- data.frame (res)
 row.names (res) <- res$gene
-res <- merge (res, mymean, by="row.names")
-res <- res[order (res$p_val_adj), ]
-row.names (res) <- res$gene
-colnames (res)[1] <- "gene_name"
+# we want G3 vs G1
 res$avg_logFC <- -1 * res$avg_logFC
 
-## Add the cell proportion
-res <- merge (res,prop, by="row.names")
-res <- res[ ,-1]
-res <- res[ ,-dim (res)[2]]
-row.names (res) <- res$gene_name 
+## Add numa info
+res <- merge (res, numa, by.x="gene", by.y="row.names")
+row.names (res) <- res$gene 
+res <- res[order (res$p_val_adj), ]
 
 ## Annotation
-
 library('org.Mm.eg.db')
 
-#columns(org.Mm.eg.db)
 symbols <- row.names (res)
 res1a <- mapIds(org.Mm.eg.db, symbols, 'GENENAME', 'SYMBOL')
 
@@ -187,9 +180,13 @@ res <- res[ ,-which (colnames (res) == "de_family")]
 
 table (res$p_val_adj < 0.05)
 #FALSE  TRUE 
-# 9330    54 
+# 9963     3 
 
-write.xlsx (res, "table 2. hippocampus_G3vsG1_selected_cells_normalization_wilcoxon_analysis.xlsx", rowNames=F)
+boxplot (res$avg_logFC)
+abline (h=0)
+
+write.xlsx (res, paste (paste ("table 2.", myarea), "_area_G3vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""), rowNames=F)
+
 
 
 
