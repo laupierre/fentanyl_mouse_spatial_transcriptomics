@@ -130,11 +130,11 @@ res <- res[order (res$padj), ]
 boxplot (res$log.fold.change)
 abline (h=0)
 
-write.xlsx (res, paste (paste ("table 5.", myarea), "_area_G3vsG1_selected_cells_brain_normalization_wilcoxon_analysis.xlsx", sep=""), rowNames=F)
+write.xlsx (res, paste (paste ("table 5.", myarea), "_area_G3vsG1_selected_cells_brain_normalization_wilcoxon_sct_flavor2_analysis.xlsx", sep=""), rowNames=F)
 
 
 ## Sanity check
-sel <- read.xlsx (paste (paste ("table 1.", myarea), "_area_G3vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""))
+sel <- read.xlsx (paste (paste ("table 2.", myarea), "_area_G3vsG1_selected_cells_normalization_wilcoxon_analysis_with_percentage_cells.xlsx", sep=""))
 
 sel <- merge (sel, res, by.x="gene", by.y="gene_name")
 head (sel)
