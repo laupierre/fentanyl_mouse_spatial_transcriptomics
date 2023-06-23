@@ -113,7 +113,7 @@ p1 <- ggplot(data = prop, mapping = aes(x=prop1)) +
 p2 <- ggplot(data = prop, mapping = aes(x=prop2)) + 
   geom_histogram(aes(y=..density..),fill="bisque",color="white",alpha=0.7, bins=20)  +
   geom_density() + xlab ("Percentage of zeros") + ylab ("Density of expressed genes") + geom_vline(xintercept=75, linetype="dashed", color = "red") +
-  ggtitle ("Percentage of zeros in the G2 group") 
+  ggtitle ("Percentage of zeros in the G3 group") 
 
 p3 <- ggarrange (p1, p2, nrow=1)
 p3
