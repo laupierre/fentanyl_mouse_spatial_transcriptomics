@@ -266,28 +266,28 @@ add_image <- function (gene) {
 
 rotation <- -90
 
-p1 <- SpatialFeaturePlot(brain, images=c("slice1"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
+p1 <- SpatialFeaturePlot(brain.s, images=c("slice1"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
 			 breaks = round (seq(0, max_gene, length.out = 6), digits=1)) + labs(title = "G2-2C") + theme(legend.text = element_text(angle=(-1*rotation), hjust=-2),
                          legend.title = element_text(angle=(-1*rotation), hjust=0.8,  size=12), 
                          plot.title = element_text(angle=(-1*rotation), face = "bold", size=12), 
                          plot.caption = element_text(angle=(-1*rotation), vjust=0.5, size=1),
                          plot.caption.position = "plot")
                          
-p2 <- SpatialFeaturePlot(brain, images=c("slice1.2"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
+p2 <- SpatialFeaturePlot(brain.s, images=c("slice1.2"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
 			 breaks = round (seq(0, max_gene, length.out = 6), digits=1)) + labs(title = "G2-2A") + theme(legend.text = element_text(angle=(-1*rotation), hjust=-2),
                          legend.title = element_text(angle=(-1*rotation), hjust=0.8,  size=12), 
                          plot.title = element_text(angle=(-1*rotation), face = "bold", size=12), 
                          plot.caption = element_text(angle=(-1*rotation), vjust=0.5, size=1),
                          plot.caption.position = "plot")
 
-p3 <- SpatialFeaturePlot(brain, images=c("slice1.3"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
+p3 <- SpatialFeaturePlot(brain.s, images=c("slice1.3"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene),
 			 breaks = round (seq(0, max_gene, length.out = 6), digits=1)) + labs(title = "G1-1C") + theme(legend.text = element_text(angle=(-1*rotation), hjust=-2),
                          legend.title = element_text(angle=(-1*rotation), hjust=0.8,  size=12), 
                          plot.title = element_text(angle=(-1*rotation), face = "bold", size=12), 
                          plot.caption = element_text(angle=(-1*rotation), vjust=0.5, size=1),
                          plot.caption.position = "plot")
 
-p4 <- SpatialFeaturePlot(brain, images=c("slice1.4"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
+p4 <- SpatialFeaturePlot(brain.s, images=c("slice1.4"),  pt.size.factor = 1, crop=FALSE, alpha = c(0.8, 1), features = gene) + ggplot2::scale_fill_gradient2(midpoint = midpoint, low="blue", mid="white", high="red", limits = c(0,max_gene), 
 		         breaks = round (seq(0, max_gene, length.out = 6), digits=1)) + labs(title = "G1-1A") + theme(legend.text = element_text(angle=(-1*rotation), hjust=-2),
                          legend.title = element_text(angle=(-1*rotation), hjust=0.8,  size=12), 
                          plot.title = element_text(angle=(-1*rotation), face = "bold", size=12), 
@@ -326,13 +326,6 @@ grid.newpage()
 pushViewport(viewport(angle=-90, width = unit(8, "inches"), height = unit(8, "inches")))  
 grid.draw(ggplot_gtable(ggplot_build(pall3)))
 dev.off ()
-
-
-
-
-
-
-
 
 
 
