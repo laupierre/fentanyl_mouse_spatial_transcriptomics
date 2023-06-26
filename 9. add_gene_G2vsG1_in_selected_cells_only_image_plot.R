@@ -262,7 +262,7 @@ brain.s <- subset (brain, idents = myarea)
 
 ## keep original colors of the entire brain (see below)
 
-add_image <- function (gene) {
+add_image <- function (gene, max_gene, midpoint) {
 
 rotation <- -90
 
