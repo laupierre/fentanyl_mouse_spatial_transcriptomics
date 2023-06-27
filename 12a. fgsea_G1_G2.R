@@ -90,7 +90,8 @@ meta.ss2$group.use <- gsub ("-.*", "", meta.ss2$group)
 seurat.ss2@meta.data <- meta.ss2
 head (seurat.ss2@meta.data)
 
-# Here we are normalizing to populate the data slot
+
+# Here we are normalizing to populate the data slot !!!
 seurat.ss2 <- NormalizeData (seurat.ss2)
 
 
