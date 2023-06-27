@@ -1,4 +1,4 @@
-## Differential gene expression with step 2. 
+## Differential gene expression with option 2. deg_selected_cells_hippocampus_G1vsG2.R 
 
 
 ## hippocampus of G1 (Sham+Veh) vs G2 (SNI+Veh)  
