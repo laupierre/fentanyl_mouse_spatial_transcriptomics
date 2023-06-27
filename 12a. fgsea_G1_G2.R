@@ -79,3 +79,77 @@ dim (counts)
 
 
 
+# for backward compatibility
+counts <- as (counts, "sparseMatrix")
+seurat.ss2 <- CreateSeuratObject(counts)
+
+#meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == "Hippocampus"), ]
+meta.ss2 <- brain@meta.data[WhichCells(brain, expression = location == myarea), ]
+meta.ss2$group.use <- gsub ("-.*", "", meta.ss2$group)
+
+seurat.ss2@meta.data <- meta.ss2
+head (seurat.ss2@meta.data)
+
+# Here we are normalizing to populate the data slot
+seurat.ss2 <- NormalizeData (seurat.ss2)
+
+
+library(presto)
+
+# here, we a comparing G2 and G1 groups, however, both directions are reported !
+res_AB <- wilcoxauc (seurat.ss2, "group.use", assay = 'data', groups_use = c('G2', 'G1'))
+res_AB <- res_AB[order (res_AB$padj), ]
+res_AB <- res_AB[res_AB$group == "G2", ]
+head (res_AB)
+
+
+
+#### fgsea
+
+library(msigdbr)
+library(fgsea)
+library(dplyr)
+library (tidyverse)
+library(ggplot2)
+library (openxlsx)
+
+msigdbr_species()
+
+m_df <- msigdbr(species = "Mus musculus", category = "C5")
+head(m_df)
+
+fgsea_sets <- m_df %>% split(x = .$gene_symbol, f = .$gs_name)
+head (fgsea_sets)
+
+
+## select only the feature and auc columns for fgsea, which statistics to use is an open question !
+
+genes <- res_AB %>% dplyr::filter(group == "G2") %>%
+                    arrange(desc(auc)) %>% 
+                    dplyr::select(feature, auc)
+
+head (genes)
+
+ranks <- deframe(genes)
+head(ranks)
+
+fgseaRes <- fgseaMultilevel (fgsea_sets, stats = ranks, minSize=15, maxSize=500)
+
+fgseaResTidy <- fgseaRes %>% as_tibble() %>% arrange(desc(NES))
+head (data.frame (fgseaResTidy))
+
+write.xlsx (data.frame (fgseaResTidy), paste (myarea, "_G2vsG1_fgsea_results.xlsx"), rowNames=F)
+
+
+p <- plotEnrichment(fgsea_sets[["GOCC_INNER_MITOCHONDRIAL_MEMBRANE_PROTEIN_COMPLEX"]], ranks) + ggtitle ("GOCC_INNER_MITOCHONDRIAL_MEMBRANE_PROTEIN_COMPLEX")
+ggsave ("fgsea_plot.pdf", p)
+
+
+
+
+
+
+
+
+
+
